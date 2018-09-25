@@ -1,12 +1,14 @@
 {
   "name": "enum-type",
   "version": "0.0.0",
-  "description": "__",
-  "main": "index.js",
+  "description": "Provides with functional enum type in js",
+  "main": "build/index.js",
   "repository": "__",
   "author": "Akshay Nair <phenax5@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "babel src --out-dir build",
+    "watch": "yarn build --watch",
     "test": "jest"
   },
   "babel": {
