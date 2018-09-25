@@ -27,6 +27,24 @@ describe('EnumType', () => {
             const action = Type.Add();
 
             const onAdd = jest.fn(() => 'Adding');
+            const result = Type.caseOf({
+                Add: onAdd,
+                Delete: () => 'Deleting',
+                _: () => 'Default',
+            })(action);
+
+            expect(result).toBe('Adding');
+            expect(onAdd).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('matching', () => {
+        it('should match the correct function and call it', () => {
+            const Type = EnumType([ 'Add', 'Delete' ]);
+
+            const action = Type.Add();
+
+            const onAdd = jest.fn(() => 'Adding');
             const result = Type.match(action, {
                 Add: onAdd,
                 Delete: () => 'Deleting',
