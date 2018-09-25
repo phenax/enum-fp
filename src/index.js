@@ -1,13 +1,13 @@
 
 import { reduceTypeConstructors, reduceTypeNames, error } from './utils';
 
-const EnumTag = (name, args = []) => ({
+export const EnumTag = (name, args = []) => ({
     args,
     name,
     is: otherType => name === otherType,
 });
 
-const EnumType = unionMap => {
+export const EnumType = unionMap => {
     // TODO: Allow passing object instead of array
 
     const types = [ ...unionMap ];
@@ -36,7 +36,10 @@ const EnumType = unionMap => {
     return self;
 };
 
+export default EnumType;
 
+
+/*
 
 // -- Use
 
@@ -48,9 +51,14 @@ Action.match(actn, {
     Add: name => `Adding ${name}`,
     Delete: () => 'Deleteing',
     _: () => 'Default case',
-})
+});
+
+*/
 
 /*
+
+// -- Ideas
+
 TODO: Add specify predicate to validate value as well
 EnumType({
     Add: todo => todo && typeof todo.name === 'string',
