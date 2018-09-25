@@ -1,36 +1,35 @@
 
-import { reduceTypeConstructors, reduceTypeNames, error } from './utils';
+import { reduceTypeConstructors, reduceTypeNames, prop, error, EnumToken } from './utils';
 
-export const EnumTag = (name, args = []) => ({
-    args,
-    name,
-    is: otherType => name === otherType,
-});
+// type Config = Array | Object *
 
-export const EnumType = unionMap => {
+// EnumType :: Config -> EnumType
+export const EnumType = enumTokens => {
     // TODO: Allow passing object instead of array
 
-    const types = [ ...unionMap ];
+    const types = enumTokens.map(name => EnumToken({ name }));
+
     const self = {
         ...reduceTypeConstructors(types),
-        types: reduceTypeNames(types),
-        match: (action, patternMap) => {
-            if(!action.name)
-                return error('Invalid action passed to match');
 
-            // TODO: Add check to check if all cases are covered in pattern
+        // types :: Array String
+        types: types.map(prop(['name'])),
 
-            const {
-            [action.name]: actor,
-            _: defaultActor
-            } = patternMap;
+        // match :: EnumTag ~> Object (a -> b) -> b
+        match: (token, patternMap) => {
+            if (!token.name) return error('Invalid token passed to match');
 
-            const args = action.args || [];
-            const fn = actor || defaultActor || (() => error('Missing default case _'));
+            const { [token.name]: action, _: defaultAction } = patternMap;
 
+            const args = token.args || [];
+            const fn = action || defaultAction;
+
+            if (!fn) return error('Missing default case _ for match');
             return fn(...args);
         },
-        caseOf: patternMap => action => self.match(action, patternMap),
+
+        // caseOf :: Object (a -> b) ~> EnumTag -> b
+        caseOf: patternMap => token => self.match(token, patternMap),
     };
 
     return self;
@@ -38,36 +37,28 @@ export const EnumType = unionMap => {
 
 export default EnumType;
 
-
-/*
-
-// -- Use
-
-const Action = EnumType([ 'Add', 'Delete', 'Edit' ]);
-
-const actn = Action.Add('Hello world');
-
-Action.match(actn, {
-    Add: name => `Adding ${name}`,
-    Delete: () => 'Deleteing',
-    _: () => 'Default case',
-});
-
-*/
-
 /*
 
 // -- Ideas
 
 TODO: Add specify predicate to validate value as well
+
 EnumType({
-    Add: todo => todo && typeof todo.name === 'string',
+    Add: message => typeof message === 'string',
 });
+
 OR
+
+EnumType({
+    Add: [ 'string' ],
+});
+
+OR
+
 EnumType({
     Add: {
-    Todo: todo => todo && typeof todo.name === 'string',
-    NewTodo: name => typeof name === 'string',
+        Todo: todo => todo && typeof todo.name === 'string',
+        NewTodo: name => typeof name === 'string',
     },
 })
 */

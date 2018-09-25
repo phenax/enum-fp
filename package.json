@@ -1,7 +1,7 @@
 {
   "name": "enum-type",
   "version": "0.0.0",
-  "description": "Provides with functional enum type in js",
+  "description": "Create and work with functional enum type in js",
   "main": "build/index.js",
   "repository": "__",
   "author": "Akshay Nair <phenax5@gmail.com>",
