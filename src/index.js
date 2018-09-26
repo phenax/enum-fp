@@ -15,17 +15,22 @@ export const EnumType = enumTokens => {
         // types :: Array String
         types: types.map(prop(['name'])),
 
+        matchToDefault: (patternMap, args = []) => {
+            const defaultAction = patternMap._;
+            if(!defaultAction) return error('Missing default case _ for match');
+            return defaultAction(...args);
+        },
+
         // match :: EnumTag ~> Object (a -> b) -> b
         match: (token, patternMap) => {
+            if (!token) return error('Invalid token passed to match');
             if (!token.name) return error('Invalid token passed to match');
 
-            const { [token.name]: action, _: defaultAction } = patternMap;
-
+            const action = patternMap[token.name];
             const args = token.args || [];
-            const fn = action || defaultAction;
 
-            if (!fn) return error('Missing default case _ for match');
-            return fn(...args);
+            if (!action) return self.matchToDefault(patternMap, args);
+            return action(...args);
         },
 
         // caseOf :: Object (a -> b) ~> EnumTag -> b

@@ -6,9 +6,7 @@ describe('EnumType', () => {
         it('should return an instance without errors', () => {
             const instance = EnumType([ 'Action1', 'Action2' ]);
         });
-    });
 
-    describe('instance', () => {
         it('should create constructors for each of the actions', () => {
             const instance = EnumType([ 'Action1', 'Action2' ]);
 
@@ -20,25 +18,7 @@ describe('EnumType', () => {
         });
     });
 
-    describe('matching', () => {
-        it('should match the correct function and call it', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
-
-            const action = Type.Add();
-
-            const onAdd = jest.fn(() => 'Adding');
-            const result = Type.caseOf({
-                Add: onAdd,
-                Delete: () => 'Deleting',
-                _: () => 'Default',
-            })(action);
-
-            expect(result).toBe('Adding');
-            expect(onAdd).toHaveBeenCalledTimes(1);
-        });
-    });
-
-    describe('matching', () => {
+    describe('#match', () => {
         it('should match the correct function and call it', () => {
             const Type = EnumType([ 'Add', 'Delete' ]);
 
@@ -78,6 +58,46 @@ describe('EnumType', () => {
             expect(() => Type.match(action, {
                 Add: () => 'Adding',
             })).toThrowError();
+        });
+
+        it('should match the correct function and call it with the constructor arguements', () => {
+            const Type = EnumType([ 'Add', 'Delete' ]);
+
+            const action = Type.Add('Hello', 'World');
+
+            const onAdd = jest.fn((str1, str2) => `Adding - ${str1} ${str2}`);
+            const result = Type.match(action, {
+                Add: onAdd,
+                Delete: () => 'Deleting',
+                _: () => 'Default',
+            });
+
+            expect(result).toBe('Adding - Hello World');
+            expect(onAdd).toHaveBeenCalledTimes(1);
+        });
+
+        it('should throw error when the action is invalid', () => {
+            const Type = EnumType([ 'Add', 'Delete' ]);
+
+            expect(() => Type.match(null, {})).toThrowError();
+        });
+    });
+
+    describe('#caseOf', () => {
+        it('should match the correct function and call it', () => {
+            const Type = EnumType([ 'Add', 'Delete' ]);
+
+            const action = Type.Add();
+
+            const onAdd = jest.fn(() => 'Adding');
+            const result = Type.caseOf({
+                Add: onAdd,
+                Delete: () => 'Deleting',
+                _: () => 'Default',
+            })(action);
+
+            expect(result).toBe('Adding');
+            expect(onAdd).toHaveBeenCalledTimes(1);
         });
     });
 });
