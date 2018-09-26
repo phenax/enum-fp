@@ -1,11 +1,21 @@
 {
   "name": "enum-fp",
   "version": "0.0.0",
-  "description": "Create and work with functional enum type in js",
+  "description": "Functional enum type for javascript with simple pattern matching",
   "main": "build/index.js",
-  "repository": "__",
+  "repository": "https://github.com/phenax/enum-fp",
   "author": "Akshay Nair <phenax5@gmail.com>",
   "license": "MIT",
+  "keywords": [
+    "functional",
+    "fp",
+    "enum",
+    "type",
+    "js",
+    "pattern",
+    "matching",
+    "switch"
+  ],
   "scripts": {
     "build": "babel src --out-dir build",
     "watch": "yarn build --watch",
