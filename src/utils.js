@@ -1,22 +1,9 @@
 
-// type EnumAction = ...a -> EnumTagType
+import EnumTag from './EnumTag';
 
 // TODO: Sanitize name to alphanumeric value
 // EnumToken :: Object -> EnumToken
 export const EnumToken = ({ name }) => ({ name });
-
-// EnumTag :: String -> ...a -> EnumTagType
-export const EnumTag = name => (...args) => ({
-    // args :: Array *
-    args,
-    // name :: String
-    name,
-
-    // is :: String | EnumTagType | EnumToken ~> Boolean
-    is: otherType => typeof otherType === 'string'
-        : (name === otherType)
-        ? (name === otherType.name),
-});
 
 // reduceTypeConstructors :: Array EnumToken -> Object EnumAction
 export const reduceTypeConstructors = types =>
