@@ -1,4 +1,5 @@
 
+// TODO: Sanitize name to alphanumeric value
 // EnumToken :: Options -> EnumTag
 export const EnumToken = ({ name }) =>
     ({ name });
