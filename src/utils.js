@@ -1,19 +1,29 @@
 
-// TODO: Sanitize name to alphanumeric value
-// EnumToken :: Options -> EnumTag
-export const EnumToken = ({ name }) =>
-    ({ name });
+// type EnumAction = ...a -> EnumTagType
 
-// EnumTag :: String -> (...*) -> EnumTag
+// TODO: Sanitize name to alphanumeric value
+// EnumToken :: Object -> EnumToken
+export const EnumToken = ({ name }) => ({ name });
+
+// EnumTag :: String -> ...a -> EnumTagType
 export const EnumTag = name => (...args) => ({
+    // args :: Array *
     args,
+    // name :: String
     name,
-    is: otherType => name === otherType.name,
+
+    // is :: String | EnumTagType | EnumToken ~> Boolean
+    is: otherType => typeof otherType === 'string'
+        : (name === otherType)
+        ? (name === otherType.name),
 });
 
-// reduceTypeConstructors :: Array EnumToken -> Object EnumTag
+// reduceTypeConstructors :: Array EnumToken -> Object EnumAction
 export const reduceTypeConstructors = types =>
-    types.reduce((o, type) => ({ ...o, [type.name]: EnumTag(type.name) }), {});
+    types.reduce((o, type) => ({
+        ...o,
+        [type.name]: EnumTag(type.name),
+    }), {});
 
 // error :: String -> ()
 export const error = msg => { throw new Error(msg); };
