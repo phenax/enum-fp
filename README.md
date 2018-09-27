@@ -57,12 +57,12 @@ logMessage(Action.Get());             // >> Unknown action
 
 ```
 
-#### React Todo App Example
+#### Using with React - Todo App Example
 ```js
 
 const Action = EnumType(['Add', 'EditInput', 'ToggleCheck', 'Delete']);
 
-const execute = Action.caseOf({
+const dispatch = Action.caseOf({
   Add: () => ({ tasks, message }) => ({
     message: '',
     tasks: [ ...tasks,
@@ -88,23 +88,23 @@ const execute = Action.caseOf({
 class TodoApp extends React.Component {
   state = { tasks: [], message: '' };
 
-  execute = action => this.setState(execute(action));
+  dispatch = compose(this.setState.bind(this), dispatch);
 
   render() {
     const { state: { message, tasks } } = this;
     return (
       <div>
         <InputForm
-          onInputChange={value => this.execute(Action.EditInput(value))}
-          onSubmit={() => this.execute(Action.Add())}
+          onInputChange={value => this.dispatch(Action.EditInput(value))}
+          onSubmit={() => this.dispatch(Action.Add())}
         />
         <div>
           {tasks.map((task, index) => ( // Pardon the index, im lazy
             <TodoItem
               task={task}
               key={task.key}
-              onCheck={() => this.execute(Action.ToggleCheck(index))}
-              onDelete={() => this.execute(Action.Delete(index))}
+              onCheck={() => this.dispatch(Action.ToggleCheck(index))}
+              onDelete={() => this.dispatch(Action.Delete(index))}
             />
           ))}
         </div>
@@ -114,7 +114,3 @@ class TodoApp extends React.Component {
 }
 
 ```
-
-
-## Running tests locally
-Run `yarn test`
