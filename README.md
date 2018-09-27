@@ -34,16 +34,15 @@ const action = Action.Edit(2, 'Hello world');
 ```js
 const Action = EnumType([ 'Add', 'Edit', 'Delete', 'DeleteAll', 'Get' ]);
 
-const logMessage = action =>
-  console.log('>>', 
-    Action.match(action, {
-      Edit: (id, message) => `Editing [${id}] to "${message}"`,
-      Add: message => `Adding "${message}"`,
-      Delete: id => `Deleting [${id}]`,
-      DeleteAll: () => 'Deleting all entries',
-      _: () => 'Unknown action', // To handle default cases, use _
-    })
-  );
+const logMessage = action => console.log('>>', 
+  Action.match(action, {
+    Edit: (id, message) => `Editing [${id}] to "${message}"`,
+    Add: message => `Adding "${message}"`,
+    Delete: id => `Deleting [${id}]`,
+    DeleteAll: () => 'Deleting all entries',
+    _: () => 'Unknown action', // To handle default cases, use _
+  })
+);
 
 logMessage(Action.Add('Earth'));      // >> Adding "Earth"
 logMessage(Action.Add('Earth 2'));    // >> Adding "Earth 2"
@@ -54,7 +53,7 @@ logMessage(Action.Add('Pluto'));      // >> Adding "Pluto"
 logMessage(Action.DeleteAll());       // >> Deleting all entries
 
 // As Get action is not handled in the pattern, it will execute the default
-logMessage(Action.Get());                   // >> Unknown action
+logMessage(Action.Get());             // >> Unknown action
 
 ```
 

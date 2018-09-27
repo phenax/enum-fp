@@ -1,17 +1,27 @@
 
 // type EnumAction = ...a -> EnumTagType
 
-// EnumTag :: String -> ...a -> EnumTagType
-export const EnumTag = name => (...args) => ({
-    // args :: Array *
-    args,
-    // name :: String
-    name,
+const checkType = (props, args) =>
+    !props? true : props.length === args.length;
 
-    // is :: String | EnumTagType | EnumToken ~> Boolean
-    is: otherType => typeof otherType === 'string'
-        ? (name === otherType)
-        : (name === otherType.name),
-});
+// EnumTag :: String -> ...a -> EnumTagType
+export const EnumTag = (name, props) => (...args) => {
+    if(!checkType(props, args))
+        return new Error(`Constructor ${name} expected ${props.length} arguments, ${args.length} passed`);
+
+    return {
+        // args :: Array *
+        args,
+        // name :: String
+        name,
+        // props :: ?Array String
+        props,
+
+        // is :: String | EnumTagType | EnumToken ~> Boolean
+        is: otherType => typeof otherType === 'string'
+            ? (name === otherType)
+            : (name === otherType.name),
+    };
+};
 
 export default EnumTag;

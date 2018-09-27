@@ -1,9 +1,11 @@
 
-import { reduceTypeConstructors, reduceTypeNames, prop, error, EnumToken } from './utils';
+import { reduceTypeConstructors, reduceTypeNames, prop, error, EnumToken, isArray } from './utils';
 
 // EnumType :: Array String | Object * -> EnumType
 const EnumType = enumTokens => {
-    const types = enumTokens.map(name => EnumToken({ name }));
+    const types = isArray(enumTokens)
+        ? enumTokens.map(name => EnumToken({ name }))
+        : Object.keys(enumTokens).map(name => EnumToken({ name, props: enumTokens[name] }));
 
     const self = {
         // {String} :: EnumAction

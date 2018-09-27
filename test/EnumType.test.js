@@ -81,6 +81,25 @@ describe('EnumType', () => {
 
             expect(() => Type.match(null, {})).toThrowError();
         });
+
+        it('should match the correct function and call it with the constructor arguements', () => {
+            const Type = EnumType({
+                Add: [ 'id', 'text' ],
+                Delete: [ 'id' ],
+            });
+
+            const pattern = {
+                Add: jest.fn((id, name) => `Adding - [${id}] ${name}`),
+                Delete: jest.fn(id => `Deleting - [${id}]`),
+            };
+            const resultOnAdd = Type.match(Type.Add(5, 'Hello World'), pattern);
+            const resultOnDelete = Type.match(Type.Delete(5), pattern);
+
+            expect(resultOnAdd).toBe('Adding - [5] Hello World');
+            expect(pattern.Add).toHaveBeenCalledTimes(1);
+            expect(resultOnDelete).toBe('Deleting - [5]');
+            expect(pattern.Delete).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe('#caseOf', () => {
