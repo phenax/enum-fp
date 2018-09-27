@@ -28,9 +28,9 @@ const EnumType = enumTokens => {
             if (!token) return error('Invalid token passed to match');
             if (!token.name) return error('Invalid token passed to match');
 
-            const isValid = !!Object.keys(patternMap).filter(self.isValidConstructor).length;
+            const isValidPattern = !!Object.keys(patternMap).filter(self.isValidConstructor).length;
 
-            if(!isValid) return error('Invalid constructor in pattern');
+            if(!isValidPattern) return error('Invalid constructor in pattern');
 
             const action = patternMap[token.name];
             const args = token.args || [];
