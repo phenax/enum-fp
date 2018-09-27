@@ -56,15 +56,25 @@ logMessage(Action.DeleteAll());       // >> Deleting all entries
 
 // As Get action is not handled in the pattern, it will execute the default
 logMessage(Action.Get());             // >> Unknown action
-
 ```
 
-#### Using with React - Todo App Example
+#### Using reducerComponent in React - Todo App Example
 ```js
+import EnumType from 'enum-fp';
+import reducerComponent from 'enum-fp/reducerComponent';
 
-const Action = EnumType(['Add', 'EditInput', 'ToggleCheck', 'Delete']);
 
-const dispatch = Action.caseOf({
+const Action = EnumType({
+  Add: [],
+  EditInput: [ 'message' ],
+  ToggleCheck: [ 'id' ],
+  Delete: [ 'id' ],
+});
+
+
+const state = { tasks: [], message: '' };
+
+const reducer = Action.caseOf({
   Add: () => ({ tasks, message }) => ({
     message: '',
     tasks: [ ...tasks,
@@ -87,32 +97,25 @@ const dispatch = Action.caseOf({
   },
 });
 
-class TodoApp extends React.Component {
-  state = { tasks: [], message: '' };
 
-  dispatch = compose(this.setState.bind(this), dispatch);
-
-  render() {
-    const { state: { message, tasks } } = this;
-    return (
+const TodoApp = reducerComponent({ state, reducer })(
+  ({ state: { message, tasks }, dispatch }) => (
+    <div>
+      <InputForm
+        onInputChange={value => dispatch(Action.EditInput(value))}
+        onSubmit={() => dispatch(Action.Add())}
+      />
       <div>
-        <InputForm
-          onInputChange={value => this.dispatch(Action.EditInput(value))}
-          onSubmit={() => this.dispatch(Action.Add())}
-        />
-        <div>
-          {tasks.map((task, index) => (
-            <TodoItem
-              task={task}
-              key={task.key}
-              onCheck={() => this.dispatch(Action.ToggleCheck(index))}
-              onDelete={() => this.dispatch(Action.Delete(index))}
-            />
-          ))}
-        </div>
+        {tasks.map((task, index) => (
+          <TodoItem
+            task={task}
+            key={task.key}
+            onCheck={() => dispatch(Action.ToggleCheck(index))}
+            onDelete={() => dispatch(Action.Delete(index))}
+          />
+        ))}
       </div>
-    );
-  }
-}
-
+    </div>
+  )
+);
 ```
