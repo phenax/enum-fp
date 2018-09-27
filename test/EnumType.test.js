@@ -82,6 +82,13 @@ describe('EnumType', () => {
             expect(() => Type.match(null, {})).toThrowError();
         });
 
+        it('should throw error when the pattern is not defined', () => {
+            const Type = EnumType([ 'Add', 'Delete' ]);
+            const OtherType = EnumType([ 'Hello', 'World' ]);
+
+            expect(() => Type.match(OtherType.Hello(), {})).toThrowError();
+        });
+
         it('should match the correct function and call it with the constructor arguements', () => {
             const Type = EnumType({
                 Add: [ 'id', 'text' ],

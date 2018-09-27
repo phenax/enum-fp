@@ -14,6 +14,8 @@ const EnumType = enumTokens => {
         // types :: Array String
         types: types.map(prop(['name'])),
 
+        isValidConstructor: c => c === '_' || !!self[c],
+
         // matchToDefault :: Object (...a -> b) -> Array a ~> b
         matchToDefault: (patternMap, args = []) => {
             const defaultAction = patternMap._;
@@ -25,6 +27,10 @@ const EnumType = enumTokens => {
         match: (token, patternMap) => {
             if (!token) return error('Invalid token passed to match');
             if (!token.name) return error('Invalid token passed to match');
+
+            const isValid = !!Object.keys(patternMap).filter(self.isValidConstructor).length;
+
+            if(!isValid) return error('Invalid constructor in pattern');
 
             const action = patternMap[token.name];
             const args = token.args || [];
