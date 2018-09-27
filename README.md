@@ -63,59 +63,25 @@ logMessage(Action.Get());             // >> Unknown action
 import EnumType from 'enum-fp';
 import reducerComponent from 'enum-fp/reducerComponent';
 
-
 const Action = EnumType({
-  Add: [],
-  EditInput: [ 'message' ],
-  ToggleCheck: [ 'id' ],
-  Delete: [ 'id' ],
+  Increment: ['by'],
+  Decrement: ['by'],
 });
 
-
-const state = { tasks: [], message: '' };
+const state = { count: 0 };
 
 const reducer = Action.caseOf({
-  Add: () => ({ tasks, message }) => ({
-    message: '',
-    tasks: [ ...tasks,
-      { message, isChecked: false, key: `${Math.random()}` },
-    ],
-  }),
-
-  EditInput: message => ({ message }),
-
-  ToggleCheck: id => ({ tasks }) => {
-    const taskList = [ ...tasks ];
-    taskList[id] = { ...taskList[id], isChecked: !taskList[id].isChecked };
-    return { tasks: taskList };
-  },
-
-  Delete: id => ({ tasks }) => {
-    const taskList = [ ...tasks ];
-    taskList.splice(id, 1);
-    return { tasks: taskList };
-  },
+  Increment: by => ({ count }) => ({ count: count + by }),
+  Decrement: by => reducer(Action.Increment(-by)),
 });
 
-
-const TodoApp = reducerComponent({ state, reducer })(
-  ({ state: { message, tasks }, dispatch }) => (
+const CounterComponent = reducerComponent({ state, reducer })(
+  ({ state: { count }, dispatch }) => (
     <div>
-      <InputForm
-        onInputChange={value => dispatch(Action.EditInput(value))}
-        onSubmit={() => dispatch(Action.Add())}
-      />
-      <div>
-        {tasks.map((task, index) => (
-          <TodoItem
-            task={task}
-            key={task.key}
-            onCheck={() => dispatch(Action.ToggleCheck(index))}
-            onDelete={() => dispatch(Action.Delete(index))}
-          />
-        ))}
-      </div>
+      <div>{count}</div>
+      <button onClick={() => dispatch(Action.Decrement(1))}>Decrement</button>
+      <button onClick={() => dispatch(Action.Increment(1))}>Increment</button>
     </div>
-  )
+  ),
 );
 ```
