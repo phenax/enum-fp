@@ -99,7 +99,7 @@ class TodoApp extends React.Component {
           onSubmit={() => this.dispatch(Action.Add())}
         />
         <div>
-          {tasks.map((task, index) => ( // Pardon the index, im lazy
+          {tasks.map((task, index) => (
             <TodoItem
               task={task}
               key={task.key}

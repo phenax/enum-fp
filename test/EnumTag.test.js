@@ -31,16 +31,16 @@ describe('EnumTag', () => {
         });
     });
 
-    // describe('#is', () => {
+    describe('#is', () => {
         
-    //     it('should return true for equivalent tokens and false otherwise', () => {
+        it('should return true for equivalent tokens and false otherwise', () => {
 
-    //         const Tag = EnumTag('Tag');
-    //         const Tag1 = EnumTag('Tag');
-    //         const Tag2 = EnumTag('NewTag');
+            const Tag = EnumTag('Tag');
+            const Tag1 = EnumTag('Tag');
+            const Tag2 = EnumTag('NewTag');
 
-    //         expect(Tag().is(Tag1())).toBeTruthy();
-    //         expect(Tag().is(Tag2())).not.toBeTruthy();
-    //     });
-    // });
+            expect(Tag().is(Tag1())).toBeTruthy();
+            expect(Tag().is(Tag2())).not.toBeTruthy();
+        });
+    });
 });
