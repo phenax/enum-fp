@@ -2,7 +2,7 @@
   "name": "enum-fp",
   "version": "0.0.1",
   "description": "Functional enum type for javascript with simple pattern matching",
-  "main": "build/index.js",
+  "main": "index.js",
   "repository": "https://github.com/phenax/enum-fp",
   "author": "Akshay Nair <phenax5@gmail.com>",
   "license": "MIT",
@@ -24,11 +24,15 @@
   "babel": {
     "presets": [
       "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
     ]
   },
   "devDependencies": {
     "@babel/cli": "^7.1.0",
     "@babel/core": "^7.1.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "babel-core": "^7.0.0-bridge",
     "babel-jest": "^23.6.0",
