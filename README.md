@@ -58,7 +58,7 @@ logMessage(Action.DeleteAll());       // >> Deleting all entries
 logMessage(Action.Get());             // >> Unknown action
 ```
 
-#### Using reducerComponent in React - Todo App Example
+#### Using reducerComponent in React - Counter Example
 ```js
 import EnumType from 'enum-fp';
 import reducerComponent from 'enum-fp/reducerComponent';
