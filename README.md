@@ -1,6 +1,6 @@
 
 # Enum-FP
-Functional enum type / Union Type for javascript with simple pattern matching
+Functional Enum type / Sum type for javascript with simple pattern matching
 
 [![CircleCI](https://img.shields.io/circleci/project/github/phenax/enum-fp/master.svg?style=for-the-badge)](https://circleci.com/gh/phenax/enum-fp)
 [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/enum-fp.svg?style=for-the-badge)](https://www.npmjs.com/package/enum-fp)
