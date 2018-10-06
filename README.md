@@ -25,6 +25,12 @@ import EnumType from 'enum-fp';
 #### Create an enum type
 ```js
 const Action = EnumType([ 'Add', 'Edit', 'Delete', 'Get' ]);
+
+// Or with a fixed set of arguments
+const Maybe = EnumType({
+    Just: [ 'value' ],
+    Nothing: [],
+});
 ```
 
 #### Create an instance of an action
