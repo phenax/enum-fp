@@ -1,5 +1,8 @@
 
+import EnumType from '../src/EnumType';
 import { reduceTypeConstructors, EnumToken } from '../src/utils';
+
+const TestType = EnumType([ 'Action1', 'Action2', 'Action3' ]);
 
 describe('utils', () => {
 
@@ -12,7 +15,7 @@ describe('utils', () => {
                 EnumToken({ name: 'Action3' }),
             ];
     
-            const result = reduceTypeConstructors(tokens);
+            const result = reduceTypeConstructors(TestType, tokens);
     
             expect(result.Action1).toBeInstanceOf(Function);
             expect(result.Action2).toBeInstanceOf(Function);

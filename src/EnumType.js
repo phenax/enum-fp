@@ -7,7 +7,7 @@ const EnumType = enumTokens => {
         ? enumTokens.map(name => EnumToken({ name }))
         : Object.keys(enumTokens).map(name => EnumToken({ name, props: enumTokens[name] }));
 
-    const self = {
+    let self = {
         // types :: Array String
         types: types.map(prop(['name'])),
 
@@ -41,11 +41,13 @@ const EnumType = enumTokens => {
         caseOf: patternMap => token => self.match(token, patternMap),
     };
 
-    return {
+    self = {
         // {String} :: EnumAction
         ...reduceTypeConstructors(self, types),
         ...self,
     };
+
+    return self;
 };
 
 export default EnumType;
