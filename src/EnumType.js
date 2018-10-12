@@ -8,12 +8,10 @@ const EnumType = enumTokens => {
         : Object.keys(enumTokens).map(name => EnumToken({ name, props: enumTokens[name] }));
 
     const self = {
-        // {String} :: EnumAction
-        ...reduceTypeConstructors(types),
-
         // types :: Array String
         types: types.map(prop(['name'])),
 
+        // isValidConstructor :: String -> Boolean
         isValidConstructor: c => c === '_' || !!self[c],
 
         // matchToDefault :: Object (...a -> b) -> Array a ~> b
@@ -43,7 +41,11 @@ const EnumType = enumTokens => {
         caseOf: patternMap => token => self.match(token, patternMap),
     };
 
-    return self;
+    return {
+        // {String} :: EnumAction
+        ...reduceTypeConstructors(self, types),
+        ...self,
+    };
 };
 
 export default EnumType;
