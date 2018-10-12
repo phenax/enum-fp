@@ -91,3 +91,63 @@ const CounterComponent = reducerComponent({ state, reducer })(
   ),
 );
 ```
+
+
+### Enum use cases
+
+#### Safely work with empty/invalid values
+```js
+const Name = EnumType({ None: [], Valid: [] });
+
+const getName = user => user && user.name
+  ? Name.Valid(user.name)
+  : Name.None();
+
+const splitBySpace = Name.caseOf({
+  Valid: name => name.split(' '),
+  None: () => [],
+});
+
+const [ firstName, lastName ] = compose(splitBySpace, getName, fetchUser);
+```
+
+#### In the react world
+
+* Reducer Component ([Docs](https://github.com/phenax/enum-fp/wiki/Reducer-Component-in-React))
+```js
+import reducerComponent from 'enum-fp/reducerComponent';
+```
+
+
+#### In the functional world
+
+* Maybe
+```js
+const Maybe = EnumType({
+  Just: [ 'value' ],
+  Nothing: [],
+});
+
+const fmap = (fn, a) => Maybe.match(a, {
+  Just: value => Maybe.Just(fn(value)),
+  Nothing: () => a,
+});
+```
+
+* Either
+```js
+const Either = EnumType({
+  Left: [ 'error' ],
+  Right: [ 'value' ],
+});
+
+const fmap = (fn, a) => Maybe.match(a, {
+  Left: () => a,
+  Right: value => Maybe.Right(fn(value)),
+});
+const fmapL = (fn, a) => Maybe.match(a, {
+  Left: value => Maybe.Right(fn(value)),
+  Right: () => a,
+});
+
+```
