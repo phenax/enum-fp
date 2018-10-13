@@ -5,11 +5,11 @@ import EnumTag from './EnumTag';
 // EnumToken :: Object -> EnumToken
 export const EnumToken = ({ name, props }) => ({ name, props });
 
-// reduceTypeConstructors :: Array EnumToken -> Object EnumAction
-export const reduceTypeConstructors = types =>
-    types.reduce((obj, type) => ({
+// reduceTypeConstructors :: (EnumType, Array EnumToken) -> Object EnumAction
+export const reduceTypeConstructors = (Type, subTypes) =>
+    subTypes.reduce((obj, subtype) => ({
         ...obj,
-        [type.name]: EnumTag(type.name, type.props),
+        [subtype.name]: EnumTag(subtype.name, Type, subtype.props),
     }), {});
 
 // error :: String -> ()
