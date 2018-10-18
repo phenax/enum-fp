@@ -91,3 +91,65 @@ const CounterComponent = reducerComponent({ state, reducer })(
   ),
 );
 ```
+
+
+### Enum use cases
+
+#### In the react world
+
+* Reducer Component ([Docs](https://github.com/phenax/enum-fp/wiki/Reducer-Component-in-React))
+```js
+import reducerComponent from 'enum-fp/reducerComponent';
+```
+
+#### Safely work with empty/invalid states
+
+* Working with invalid values
+```js
+// Just an example. You should use `Maybe` functor in cases like these
+const Value = EnumType({ Invalid: [], Valid: ['value'] });
+
+const getName = user => user && user.name
+  ? Value.Valid(user.name)
+  : Value.Invalid();
+
+const splitBySpace = Value.caseOf({
+  Valid: name => name.split(' '),
+  Invalid: () => [],
+});
+
+const [ firstName, lastName ] = compose(splitBySpace, getName, getUser)();
+```
+
+#### In the functional world
+
+* Maybe
+```js
+const Maybe = EnumType({
+  Just: [ 'value' ],
+  Nothing: [],
+});
+
+const fmap = (fn, a) => Maybe.match(a, {
+  Just: value => Maybe.Just(fn(value)),
+  Nothing: () => a,
+});
+```
+
+* Either
+```js
+const Either = EnumType({
+  Left: [ 'error' ],
+  Right: [ 'value' ],
+});
+
+const fmap = (fn, a) => Maybe.match(a, {
+  Left: () => a,
+  Right: value => Maybe.Right(fn(value)),
+});
+const fmapL = (fn, a) => Maybe.match(a, {
+  Left: value => Maybe.Right(fn(value)),
+  Right: () => a,
+});
+
+```
