@@ -22,14 +22,14 @@ var EnumToken = function EnumToken(_ref) {
     name: name,
     props: props
   };
-}; // reduceTypeConstructors :: Array EnumToken -> Object EnumAction
+}; // reduceTypeConstructors :: (EnumType, Array EnumToken) -> Object EnumAction
 
 
 exports.EnumToken = EnumToken;
 
-var reduceTypeConstructors = function reduceTypeConstructors(types) {
-  return types.reduce(function (obj, type) {
-    return _objectSpread({}, obj, _defineProperty({}, type.name, (0, _EnumTag.default)(type.name, type.props)));
+var reduceTypeConstructors = function reduceTypeConstructors(Type, subTypes) {
+  return subTypes.reduce(function (obj, subtype) {
+    return _objectSpread({}, obj, _defineProperty({}, subtype.name, (0, _EnumTag.default)(subtype.name, Type, subtype.props)));
   }, {});
 }; // error :: String -> ()
 
