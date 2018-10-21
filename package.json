@@ -19,7 +19,8 @@
   "scripts": {
     "build": "babel src --out-dir build",
     "watch": "yarn build --watch",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "babel": {
     "presets": [
@@ -37,5 +38,8 @@
     "babel-core": "^7.0.0-bridge",
     "babel-jest": "^23.6.0",
     "jest": "^23.6.0"
+  },
+  "optionalDependencies": {
+    "react": "^16.5.2"
   }
 }
