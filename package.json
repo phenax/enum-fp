@@ -20,7 +20,8 @@
     "build": "babel src --out-dir build",
     "watch": "yarn build --watch",
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "coverage:ci": "yarn coverage && codecov"
   },
   "babel": {
     "presets": [
