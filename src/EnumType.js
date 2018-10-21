@@ -23,8 +23,7 @@ const EnumType = enumTokens => {
 
         // match :: EnumTagType ~> Object (a -> b) -> b
         match: (token, patternMap) => {
-            if (!token) return error('Invalid token passed to match');
-            if (!token.name) return error('Invalid token passed to match');
+            if (!token || !token.name) return error('Invalid token passed to match');
 
             const isValidPattern = !!Object.keys(patternMap).filter(self.isValidConstructor).length;
 
