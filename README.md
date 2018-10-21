@@ -4,7 +4,7 @@ Functional Enum type / Sum type for javascript with simple pattern matching
 
 [![CircleCI](https://img.shields.io/circleci/project/github/phenax/enum-fp/master.svg?style=for-the-badge)](https://circleci.com/gh/phenax/enum-fp)
 [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/enum-fp.svg?style=for-the-badge)](https://www.npmjs.com/package/enum-fp)
-[![Codecov](https://img.shields.io/codecov/c/github/codecov/example-python.svg?style=for-the-badge)](https://codecov.io/gh/phenax/enum-fp)
+[![Codecov](https://img.shields.io/codecov/c/github/phenax/enum-fp.svg?style=for-the-badge)](https://codecov.io/gh/phenax/enum-fp)
 
 
 [Read the wiki for more information](https://github.com/phenax/enum-fp/wiki)
