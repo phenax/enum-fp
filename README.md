@@ -103,6 +103,27 @@ const CounterComponent = reducerComponent({ state, reducer })(
 import reducerComponent from 'enum-fp/reducerComponent';
 ```
 
+* Using the new react-hooks (useReducer)
+```js
+const Action = EnumType(['Increment', 'Decrement']);
+
+const reducer = (count, action) => Action.match(action, {
+  Increment: () => count + 1,
+  Decrement: () => count - 1,
+});
+
+const Counter = () => {
+  const [count, dispatch] = useReducer(reducer, 0);
+  return (
+    <div>
+      <div>{count}</div>
+      <button onClick={() => dispatch(Action.Decrement())}>Decr</button>
+      <button onClick={() => dispatch(Action.Increment())}>Incr</button>
+    </div>
+  );
+};
+```
+
 #### Safely work with empty/invalid states
 
 * Working with invalid values
