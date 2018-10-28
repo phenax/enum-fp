@@ -98,33 +98,14 @@ const CounterComponent = reducerComponent({ state, reducer })(
 
 #### In the react world
 
-* Reducer Component ([Docs](https://github.com/phenax/enum-fp/wiki/Reducer-Component-in-React))
+* Reducer Component ([Docs](https://github.com/phenax/enum-fp/wiki/React))
 ```js
 import reducerComponent from 'enum-fp/reducerComponent';
 ```
 
-* Using the new react-hooks (`useEnumReducer` from `useReducer`)
+* Using the new react-hooks (`useEnumReducer`)  ([Docs](https://github.com/phenax/enum-fp/wiki/React))
 ```js
-const useEnumReducer = (reducer, initialState) =>
-    useReducer((state, action) => reducer(action)(state), initialState);
-
-const Action = EnumType(['Increment', 'Decrement']);
-
-const reducer = Action.caseOf({
-  Increment: () => count => count + 1,
-  Decrement: () => count => count - 1,
-});
-
-const Counter = () => {
-  const [count, dispatch] = useEnumReducer(reducer, 0);
-  return (
-    <div>
-      <div>{count}</div>
-      <button onClick={() => dispatch(Action.Decrement())}>Decr</button>
-      <button onClick={() => dispatch(Action.Increment())}>Incr</button>
-    </div>
-  );
-};
+import useEnumReducer from 'enum-fp/useReducer';
 ```
 
 #### Safely work with empty/invalid states
