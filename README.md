@@ -103,17 +103,20 @@ const CounterComponent = reducerComponent({ state, reducer })(
 import reducerComponent from 'enum-fp/reducerComponent';
 ```
 
-* Using the new react-hooks (useReducer)
+* Using the new react-hooks (`useEnumReducer` from `useReducer`)
 ```js
+const useEnumReducer = (reducer, initialState) =>
+    useReducer((state, action) => reducer(action)(state), initialState);
+
 const Action = EnumType(['Increment', 'Decrement']);
 
-const reducer = (count, action) => Action.match(action, {
-  Increment: () => count + 1,
-  Decrement: () => count - 1,
+const reducer = Action.caseOf({
+  Increment: () => count => count + 1,
+  Decrement: () => count => count - 1,
 });
 
 const Counter = () => {
-  const [count, dispatch] = useReducer(reducer, 0);
+  const [count, dispatch] = useEnumReducer(reducer, 0);
   return (
     <div>
       <div>{count}</div>
