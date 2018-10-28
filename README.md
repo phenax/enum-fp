@@ -98,15 +98,14 @@ const CounterComponent = reducerComponent({ state, reducer })(
 
 #### In the react world
 
-* Reducer Component ([Docs](https://github.com/phenax/enum-fp/wiki/Reducer-Component-in-React))
+* Reducer Component ([Docs](https://github.com/phenax/enum-fp/wiki/React))
 ```js
 import reducerComponent from 'enum-fp/reducerComponent';
 ```
 
-* Using the new react-hooks (`useEnumReducer` from `useReducer`)
+* Using the new react-hooks (`useEnumReducer`)  ([Docs](https://github.com/phenax/enum-fp/wiki/React))
 ```js
-const useEnumReducer = (reducer, initialState) =>
-    useReducer((state, action) => reducer(action)(state), initialState);
+import useEnumReducer from 'enum-fp/useEnumReducer';
 
 const Action = EnumType(['Increment', 'Decrement']);
 
