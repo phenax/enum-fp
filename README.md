@@ -9,6 +9,8 @@ Functional Enum type / Sum type for javascript with simple pattern matching
 
 [Read the wiki for more information](https://github.com/phenax/enum-fp/wiki)
 
+[Medium article on SumTypes using EnumFP](https://medium.com/@phenax5/writing-cleaner-and-safer-javascript-with-sum-types-bec9c68ba7aa)
+
 ## Install
 
 #### To add the project to your project
