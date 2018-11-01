@@ -1,11 +1,13 @@
 
-import { reduceTypeConstructors, reduceTypeNames, prop, error, EnumToken, isArray } from './utils';
+import { reduceTypeConstructors, reduceTypeNames, prop, error, ConstructorDescription, isArray } from './utils';
 
+// (constructor)
 // EnumType :: Array String | Object * -> EnumType
-const EnumType = enumTokens => {
-    const types = isArray(enumTokens)
-        ? enumTokens.map(name => EnumToken({ name }))
-        : Object.keys(enumTokens).map(name => EnumToken({ name, props: enumTokens[name] }));
+const EnumType = constructorDescrMap => {
+    const types = isArray(constructorDescrMap)
+        ? constructorDescrMap.map(name => ConstructorDescription({ name }))
+        : Object.keys(constructorDescrMap)
+            .map(name => ConstructorDescription({ name, props: constructorDescrMap[name] }));
 
     let self = {
         // types :: Array String

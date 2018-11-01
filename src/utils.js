@@ -2,10 +2,10 @@
 import EnumTag from './EnumTag';
 
 // TODO: Sanitize name to alphanumeric value
-// EnumToken :: Object -> EnumToken
-export const EnumToken = ({ name, props }) => ({ name, props });
+// ConstructorDescription :: Object -> ConstructorDescription
+export const ConstructorDescription = ({ name, props }) => ({ name, props });
 
-// reduceTypeConstructors :: (EnumType, Array EnumToken) -> Object EnumAction
+// reduceTypeConstructors :: (EnumType, Array ConstructorDescription) -> Object EnumAction
 export const reduceTypeConstructors = (Type, subTypes) =>
     subTypes.reduce((obj, subtype) => ({
         ...obj,

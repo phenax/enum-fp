@@ -29,14 +29,14 @@ import EnumType from 'enum-fp';
 ```js
 const Action = EnumType([ 'Add', 'Edit', 'Delete', 'Get' ]);
 
-// Or with a fixed set of arguments
+// Or with a fixed number of arguments
 const Maybe = EnumType({
     Just: [ 'value' ],
     Nothing: [],
 });
 ```
 
-#### Create an instance of an action
+#### Create an instance of the type using one of the contructors
 ```js
 const action = Action.Edit(2, 'Hello world');
 ```
