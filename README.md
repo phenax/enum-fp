@@ -7,7 +7,7 @@ Functional Enum type / Sum type for javascript with simple pattern matching
 [![Codecov](https://img.shields.io/codecov/c/github/phenax/enum-fp.svg?style=for-the-badge)](https://codecov.io/gh/phenax/enum-fp)
 
 
-[Read the wiki for more information](https://github.com/phenax/enum-fp/wiki)
+[Checkout the docs for more information](./docs)
 
 [Medium article on SumTypes using EnumFP](https://medium.com/@phenax5/writing-cleaner-and-safer-javascript-with-sum-types-bec9c68ba7aa)
 
@@ -100,12 +100,12 @@ const CounterComponent = reducerComponent({ state, reducer })(
 
 #### In the react world
 
-* Reducer Component ([Docs](https://github.com/phenax/enum-fp/wiki/React))
+* Reducer Component ([Docs](./docs/react.md))
 ```js
 import reducerComponent from 'enum-fp/reducerComponent';
 ```
 
-* Using the new react-hooks (`useEnumReducer`)  ([Docs](https://github.com/phenax/enum-fp/wiki/React))
+* Using the new react-hooks (`useEnumReducer`)  ([Docs](./docs/react.md))
 ```js
 import useEnumReducer from 'enum-fp/useReducer';
 ```
