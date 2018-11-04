@@ -19,6 +19,7 @@
   "scripts": {
     "build": "babel src --out-dir build",
     "watch": "yarn build --watch",
+    "lint": "eslint ./src",
     "test": "jest",
     "test:ci": "jest",
     "coverage": "jest --coverage",
@@ -38,6 +39,7 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "babel-core": "^7.0.0-bridge",
+    "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
     "codecov": "^3.1.0",
     "jest": "^23.6.0"

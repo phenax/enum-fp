@@ -1,14 +1,14 @@
 
-import EnumType from '../src';
+import Enum from '../src';
 
-describe('EnumType', () => {
+describe('Enum', () => {
     describe('constructor', () => {
         it('should return an instance without errors', () => {
-            const instance = EnumType([ 'Action1', 'Action2' ]);
+            const instance = Enum([ 'Action1', 'Action2' ]);
         });
 
         it('should create constructors for each of the actions', () => {
-            const instance = EnumType([ 'Action1', 'Action2' ]);
+            const instance = Enum([ 'Action1', 'Action2' ]);
 
             expect(instance.Action1).toBeInstanceOf(Function);
             expect(instance.Action2).toBeInstanceOf(Function);
@@ -20,7 +20,7 @@ describe('EnumType', () => {
 
     describe('#match', () => {
         it('should match the correct function and call it', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Add();
 
@@ -36,7 +36,7 @@ describe('EnumType', () => {
         });
 
         it('should call the default function when the action is not specified', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Delete();
 
@@ -51,7 +51,7 @@ describe('EnumType', () => {
         });
 
         it('should call the default function when the action is not specified', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Delete();
 
@@ -61,7 +61,7 @@ describe('EnumType', () => {
         });
 
         it('should match the correct function and call it with the constructor arguements', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Add('Hello', 'World');
 
@@ -77,20 +77,20 @@ describe('EnumType', () => {
         });
 
         it('should throw error when the action is invalid', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             expect(() => Type.match(null, {})).toThrowError();
         });
 
         it('should throw error when the pattern is not defined', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
-            const OtherType = EnumType([ 'Hello', 'World' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
+            const OtherType = Enum([ 'Hello', 'World' ]);
 
             expect(() => Type.match(OtherType.Hello(), {})).toThrowError();
         });
 
         it('should match the correct function and call it with the constructor arguements', () => {
-            const Type = EnumType({
+            const Type = Enum({
                 Add: [ 'id', 'text' ],
                 Delete: [ 'id' ],
             });
@@ -111,7 +111,7 @@ describe('EnumType', () => {
 
     describe('#caseOf', () => {
         it('should match the correct function and call it', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Add();
 

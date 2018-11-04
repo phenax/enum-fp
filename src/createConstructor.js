@@ -1,14 +1,13 @@
 
 // type TypeConstructor = ...a -> EnumTagType
 
-
 // validateArguments :: (?Array String, [a]) -> Boolean
 const validateArguments = (props, args) =>
     !props? true : props.length === args.length;
 
 // (constructor)
-// EnumTag :: (String, EnumType, ?Array String) -> TypeConstructor
-export const EnumTag = (name, Type, props) => (...args) => {
+// createConstructor :: (String, Enum, ?Array String) -> TypeConstructor
+export const createConstructor = (name, Type, props) => (...args) => {
     if(!validateArguments(props, args))
         throw new TypeError(`Invalid number of arguments passed to constructor ${name}`);
 
@@ -29,4 +28,4 @@ export const EnumTag = (name, Type, props) => (...args) => {
     return self;
 };
 
-export default EnumTag;
+export default createConstructor;

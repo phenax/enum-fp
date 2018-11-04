@@ -1,8 +1,8 @@
 
-import EnumType from '../src/EnumType';
+import Enum from '../src/Enum';
 import { reduceTypeConstructors, ConstructorDescription } from '../src/utils';
 
-const TestType = EnumType([ 'Action1', 'Action2', 'Action3' ]);
+const TestType = Enum([ 'Action1', 'Action2', 'Action3' ]);
 
 describe('utils', () => {
 
