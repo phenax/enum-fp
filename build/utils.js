@@ -3,11 +3,17 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isArray = exports.prop = exports.error = exports.reduceTypeConstructors = exports.ConstructorDescription = void 0;
+exports.normalizeSumType = exports.matchToDefault = exports.isArray = exports.prop = exports.reduceTypeConstructors = exports.ConstructorDescription = void 0;
 
 var _createConstructor = _interopRequireDefault(require("./createConstructor"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest(); }
 
@@ -39,17 +45,10 @@ var reduceTypeConstructors = function reduceTypeConstructors(Type, subTypes) {
   return subTypes.reduce(function (obj, subtype) {
     return _objectSpread({}, obj, _defineProperty({}, subtype.name, (0, _createConstructor.default)(subtype.name, Type, subtype.props)));
   }, {});
-}; // error :: String -> ()
-
-
-exports.reduceTypeConstructors = reduceTypeConstructors;
-
-var error = function error(msg) {
-  throw new Error(msg);
 }; // prop :: Array -> Object
 
 
-exports.error = error;
+exports.reduceTypeConstructors = reduceTypeConstructors;
 
 var prop = function prop(_ref2, defaultVal) {
   var _ref3 = _toArray(_ref2),
@@ -66,6 +65,31 @@ exports.prop = prop;
 
 var isArray = function isArray(arr) {
   return Object.prototype.toString.call(arr) === '[object Array]';
-};
+}; // matchToDefault :: Object (...a -> b) -> [a] -> b
+
 
 exports.isArray = isArray;
+
+var matchToDefault = function matchToDefault(patternMap, args) {
+  var defaultAction = patternMap._;
+  if (!defaultAction) throw new Error('Missing default case _ for match');
+  return defaultAction.apply(void 0, _toConsumableArray(args));
+}; // normalizeSumType :: Array String | Object [a] -> ConstructorDescription
+
+
+exports.matchToDefault = matchToDefault;
+
+var normalizeSumType = function normalizeSumType(sumType) {
+  return isArray(sumType) ? sumType.map(function (name) {
+    return ConstructorDescription({
+      name: name
+    });
+  }) : Object.keys(sumType).map(function (name) {
+    return ConstructorDescription({
+      name: name,
+      props: sumType[name]
+    });
+  });
+};
+
+exports.normalizeSumType = normalizeSumType;

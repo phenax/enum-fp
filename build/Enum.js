@@ -19,59 +19,47 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-// matchToDefault :: Object (...a -> b) -> [a] -> b
-var matchToDefault = function matchToDefault(patternMap) {
-  var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  var defaultAction = patternMap._;
-  if (!defaultAction) return (0, _utils.error)('Missing default case _ for match');
-  return defaultAction.apply(void 0, _toConsumableArray(args));
-}; // normalizeSumType :: Array String | Object [a] -> ConstructorDescription
-
-
-var normalizeSumType = function normalizeSumType(sumType) {
-  return (0, _utils.isArray)(sumType) ? sumType.map(function (name) {
-    return (0, _utils.ConstructorDescription)({
-      name: name
-    });
-  }) : Object.keys(sumType).map(function (name) {
-    return (0, _utils.ConstructorDescription)({
-      name: name,
-      props: sumType[name]
-    });
-  });
-}; // (constructor)
+// type Pattern = Object (a -> b);
+// (constructor)
 // Enum :: Array String | Object * -> Enum
-
-
 var Enum = function Enum(sumTypeBody) {
-  var constructors = normalizeSumType(sumTypeBody);
-  var types = constructors.map((0, _utils.prop)(['name']));
+  var constructors = (0, _utils.normalizeSumType)(sumTypeBody);
+  var types = constructors.map((0, _utils.prop)(['name'])); // isConstructor :: String ~> Boolean
 
   var isConstructor = function isConstructor(c) {
-    return c === '_' || types.indexOf(c) !== -1;
-  };
+    return types.indexOf(c) !== -1 || types.indexOf(c.name) !== -1;
+  }; // isPatternKey :: String -> Boolean
+
+
+  var isPatternKey = function isPatternKey(c) {
+    return c === '_' || isConstructor(c);
+  }; // isValidPattern :: Pattern -> Boolean
+
 
   var isValidPattern = function isValidPattern(p) {
-    return !!Object.keys(p).filter(isConstructor).length;
-  };
+    return !!Object.keys(p).filter(isPatternKey).length;
+  }; // cata :: Pattern ~> EnumTagType -> b
 
-  var self = {
-    isConstructor: isConstructor,
-    // match :: EnumTagType ~> Object (a -> b) -> b
-    match: function match(token, patternMap) {
+
+  var cata = function cata(patternMap) {
+    return function (token) {
       if (!token || !token.name) throw new Error('Invalid token passed to match');
       if (!isValidPattern(patternMap)) throw new Error('Invalid constructor in pattern');
       var action = patternMap[token.name];
-      var args = token.args || [];
-      if (!action) return matchToDefault(patternMap, args);
+      var args = token.args;
+      if (!action) return (0, _utils.matchToDefault)(patternMap, args);
       return action.apply(void 0, _toConsumableArray(args));
+    };
+  };
+
+  var self = {
+    // match :: EnumTagType ~> Pattern -> b
+    match: function match(token, pattern) {
+      return cata(pattern)(token);
     },
-    // caseOf :: Object (a -> b) ~> EnumTagType -> b
-    caseOf: function caseOf(patternMap) {
-      return function (token) {
-        return self.match(token, patternMap);
-      };
-    }
+    cata: cata,
+    caseOf: cata,
+    isConstructor: isConstructor
   };
   return _objectSpread({}, (0, _utils.reduceTypeConstructors)(self, constructors), self);
 };

@@ -5,7 +5,6 @@
 const validateArguments = (props, args) =>
     !props? true : props.length === args.length;
 
-// (constructor)
 // createConstructor :: (String, Enum, ?Array String) -> TypeConstructor
 export const createConstructor = (name, Type, props) => (...args) => {
     if(!validateArguments(props, args))
