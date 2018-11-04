@@ -1,5 +1,5 @@
 
-import Enum from '../src';
+import Enum from '../src/Enum';
 
 describe('Enum', () => {
     describe('constructor', () => {
