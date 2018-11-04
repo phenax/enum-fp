@@ -5,7 +5,7 @@ import React from 'react';
 // type Config = { state :: State, reducer :: Reducer };
 
 // reducerComponent :: Config -> React.Component -> React.Component
-export const reducerComponent = ({ state, reducer }) => Component => {
+export const reducerComponent = (reducer, state) => Component => {
     class ReducerComponent extends React.Component {
         state = { ...state };
         // dispatch :: EnumTagType ~> ()
