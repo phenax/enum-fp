@@ -16,8 +16,11 @@ export const reduceTypeConstructors = (Type, subTypes) =>
 export const error = msg => { throw new Error(msg); };
 
 // prop :: Array -> Object
-export const prop = path => obj =>
-    path.reduce((o, key) => ({ ...o, [key]: o[key] }), obj);
+export const prop = ([key, ...path], defaultVal) => obj =>
+    (obj || {}).hasOwnProperty(key)
+        ? (path.length ? prop(path, defaultVal)(obj[key]) : obj[key])
+        : defaultVal;
 
+// isArray :: * -> Boolean
 export const isArray = arr =>
     Object.prototype.toString.call(arr) === '[object Array]';
