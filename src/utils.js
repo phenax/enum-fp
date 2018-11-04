@@ -1,15 +1,15 @@
 
-import EnumTag from './EnumTag';
+import createConstructor from './createConstructor';
 
 // TODO: Sanitize name to alphanumeric value
-// EnumToken :: Object -> EnumToken
-export const EnumToken = ({ name, props }) => ({ name, props });
+// ConstructorDescription :: Object -> ConstructorDescription
+export const ConstructorDescription = ({ name, props }) => ({ name, props });
 
-// reduceTypeConstructors :: (EnumType, Array EnumToken) -> Object EnumAction
+// reduceTypeConstructors :: (Enum, Array ConstructorDescription) -> Object EnumAction
 export const reduceTypeConstructors = (Type, subTypes) =>
     subTypes.reduce((obj, subtype) => ({
         ...obj,
-        [subtype.name]: EnumTag(subtype.name, Type, subtype.props),
+        [subtype.name]: createConstructor(subtype.name, Type, subtype.props),
     }), {});
 
 // error :: String -> ()

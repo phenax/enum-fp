@@ -1,8 +1,8 @@
 
-import EnumType from '../src/EnumType';
-import { reduceTypeConstructors, EnumToken } from '../src/utils';
+import Enum from '../src/Enum';
+import { reduceTypeConstructors, ConstructorDescription } from '../src/utils';
 
-const TestType = EnumType([ 'Action1', 'Action2', 'Action3' ]);
+const TestType = Enum([ 'Action1', 'Action2', 'Action3' ]);
 
 describe('utils', () => {
 
@@ -10,9 +10,9 @@ describe('utils', () => {
 
         it('should map all the passed tokens to object of constructors', () => {
             const tokens = [
-                EnumToken({ name: 'Action1' }),
-                EnumToken({ name: 'Action2' }),
-                EnumToken({ name: 'Action3' }),
+                ConstructorDescription({ name: 'Action1' }),
+                ConstructorDescription({ name: 'Action2' }),
+                ConstructorDescription({ name: 'Action3' }),
             ];
     
             const result = reduceTypeConstructors(TestType, tokens);

@@ -1,11 +1,13 @@
 
-import { reduceTypeConstructors, reduceTypeNames, prop, error, EnumToken, isArray } from './utils';
+import { reduceTypeConstructors, prop, error, ConstructorDescription, isArray } from './utils';
 
-// EnumType :: Array String | Object * -> EnumType
-const EnumType = enumTokens => {
-    const types = isArray(enumTokens)
-        ? enumTokens.map(name => EnumToken({ name }))
-        : Object.keys(enumTokens).map(name => EnumToken({ name, props: enumTokens[name] }));
+// (constructor)
+// Enum :: Array String | Object * -> Enum
+const Enum = constructorDescrMap => {
+    const types = isArray(constructorDescrMap)
+        ? constructorDescrMap.map(name => ConstructorDescription({ name }))
+        : Object.keys(constructorDescrMap)
+            .map(name => ConstructorDescription({ name, props: constructorDescrMap[name] }));
 
     let self = {
         // types :: Array String
@@ -41,7 +43,7 @@ const EnumType = enumTokens => {
     };
 
     self = {
-        // {String} :: EnumAction
+        // {String} :: TypeConstructor
         ...reduceTypeConstructors(self, types),
         ...self,
     };
@@ -49,4 +51,4 @@ const EnumType = enumTokens => {
     return self;
 };
 
-export default EnumType;
+export default Enum;

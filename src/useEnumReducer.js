@@ -1,4 +1,12 @@
 
 import { useReducer } from 'react';
 
-export default (reducer, initialState) => useReducer((state, action) => reducer(action)(state), initialState);
+// type Config = { useReducer :: React.Hook };
+
+
+// useReducer :: Config -> (Reducer, State) -> [ State, EnumTagType -> () ]
+export const createHook = ({ useReducer }) =>
+    (reducer, initialState) => useReducer((state, action) => reducer(action)(state), initialState);
+
+// useReducer :: (Reducer, State) -> [ State, EnumTagType -> () ]
+export default createHook({ useReducer });

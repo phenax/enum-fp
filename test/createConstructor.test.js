@@ -1,16 +1,16 @@
 
-import EnumType from '../src/EnumType';
-import EnumTag from '../src/EnumTag';
+import Enum from '../src/Enum';
+import createConstructor from '../src/createConstructor';
 
-const TestType = EnumType([ 'Type', 'TypeWithArgs', 'Tag', 'NewTag' ]);
+const TestType = Enum([ 'Type', 'TypeWithArgs', 'Tag', 'NewTag' ]);
 
-describe('EnumTag', () => {
+describe('createConstructor', () => {
 
     describe('#constructor', () => {
 
         it('should have name, props and args', () => {
-            const Tag = EnumTag('Type', TestType);
-            const TagWithArgs = EnumTag('TypeWithArgs', TestType, [ 'id', 'message' ]);
+            const Tag = createConstructor('Type', TestType);
+            const TagWithArgs = createConstructor('TypeWithArgs', TestType, [ 'id', 'message' ]);
 
             const tag = Tag();
             const tagWithArgs = TagWithArgs(5, 'Hello world');
@@ -25,7 +25,7 @@ describe('EnumTag', () => {
         });
 
         it('should throw error if there is a mismatch in the props and arguements', () => {
-            const Tag = EnumTag('Type', TestType, [ 'a', 'b' ]);
+            const Tag = createConstructor('Type', TestType, [ 'a', 'b' ]);
 
             expect(() => Tag(1, 2)).not.toThrowError();
             expect(() => Tag()).toThrowError();
@@ -38,9 +38,9 @@ describe('EnumTag', () => {
         
         it('should return true for equivalent tokens and false otherwise', () => {
 
-            const Tag = EnumTag('Tag', TestType);
-            const Tag1 = EnumTag('Tag', TestType);
-            const Tag2 = EnumTag('NewTag', TestType);
+            const Tag = createConstructor('Tag', TestType);
+            const Tag1 = createConstructor('Tag', TestType);
+            const Tag2 = createConstructor('NewTag', TestType);
 
             expect(Tag().is(Tag1())).toBeTruthy();
             expect(Tag().is(Tag2())).not.toBeTruthy();
@@ -50,7 +50,7 @@ describe('EnumTag', () => {
     describe('#match', () => {
         
         it('should match the correct function and call it', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Add();
 
@@ -66,7 +66,7 @@ describe('EnumTag', () => {
         });
 
         it('should call the default function when the action is not specified', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Delete();
 
@@ -81,7 +81,7 @@ describe('EnumTag', () => {
         });
 
         it('should call the default function when the action is not specified', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Delete();
 
@@ -91,7 +91,7 @@ describe('EnumTag', () => {
         });
 
         it('should match the correct function and call it with the constructor arguements', () => {
-            const Type = EnumType([ 'Add', 'Delete' ]);
+            const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Add('Hello', 'World');
 
@@ -107,7 +107,7 @@ describe('EnumTag', () => {
         });
 
         it('should match the correct function and call it with the constructor arguements', () => {
-            const Type = EnumType({
+            const Type = Enum({
                 Add: [ 'id', 'text' ],
                 Delete: [ 'id' ],
             });

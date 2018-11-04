@@ -1,4 +1,2 @@
 
-import EnumType from './EnumType';
-
-export default EnumType;
+export { default } from './Enum';

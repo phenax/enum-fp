@@ -1,8 +1,14 @@
 import React from 'react';
 
-export const reducerComponent = ({ state, reducer }) => Component => {
+// type State = Object *;
+// type Reducer = EnumTagType -> (State | State -> State);
+// type Config = { state :: State, reducer :: Reducer };
+
+// reducerComponent :: Config -> React.Component -> React.Component
+export const reducerComponent = (reducer, state) => Component => {
     class ReducerComponent extends React.Component {
         state = { ...state };
+        // dispatch :: EnumTagType ~> ()
         dispatch = action => this.setState(reducer(action));
         render = () => React.createElement(Component, {
             ...this.props,
