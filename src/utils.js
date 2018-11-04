@@ -6,10 +6,10 @@ import createConstructor from './createConstructor';
 export const ConstructorDescription = ({ name, props }) => ({ name, props });
 
 // reduceTypeConstructors :: (Enum, Array ConstructorDescription) -> Object EnumAction
-export const reduceTypeConstructors = (Type, subTypes) =>
-    subTypes.reduce((obj, subtype) => ({
+export const reduceTypeConstructors = (Type, constrDescrs) =>
+    constrDescrs.reduce((obj, constr) => ({
         ...obj,
-        [subtype.name]: createConstructor(subtype.name, Type, subtype.props),
+        [constr.name]: createConstructor(Type, constr),
     }), {});
 
 // prop :: Array -> Object

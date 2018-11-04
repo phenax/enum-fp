@@ -1,6 +1,7 @@
 
 import Enum from '../src/Enum';
 import createConstructor from '../src/createConstructor';
+import { ConstructorDescription as Constr } from '../src/utils';
 
 const TestType = Enum([ 'Type', 'TypeWithArgs', 'Tag', 'NewTag' ]);
 
@@ -9,8 +10,11 @@ describe('createConstructor', () => {
     describe('#constructor', () => {
 
         it('should have name, props and args', () => {
-            const Tag = createConstructor('Type', TestType);
-            const TagWithArgs = createConstructor('TypeWithArgs', TestType, [ 'id', 'message' ]);
+            const Tag = createConstructor(TestType, Constr({ name: 'Type' }));
+            const TagWithArgs = createConstructor(TestType, Constr({
+                name: 'TypeWithArgs',
+                props: [ 'id', 'message' ],
+            }));
 
             const tag = Tag();
             const tagWithArgs = TagWithArgs(5, 'Hello world');
@@ -25,7 +29,10 @@ describe('createConstructor', () => {
         });
 
         it('should throw error if there is a mismatch in the props and arguements', () => {
-            const Tag = createConstructor('Type', TestType, [ 'a', 'b' ]);
+            const Tag = createConstructor(TestType, Constr({
+                name: 'Type',
+                props: [ 'a', 'b' ],
+            }));
 
             expect(() => Tag(1, 2)).not.toThrowError();
             expect(() => Tag()).toThrowError();
@@ -38,9 +45,9 @@ describe('createConstructor', () => {
         
         it('should return true for equivalent tokens and false otherwise', () => {
 
-            const Tag = createConstructor('Tag', TestType);
-            const Tag1 = createConstructor('Tag', TestType);
-            const Tag2 = createConstructor('NewTag', TestType);
+            const Tag = createConstructor(TestType, Constr({ name: 'Tag' }));
+            const Tag1 = createConstructor(TestType, Constr({ name: 'Tag' }));
+            const Tag2 = createConstructor(TestType, Constr({ name: 'NewTag' }));
 
             expect(Tag().is(Tag1())).toBeTruthy();
             expect(Tag().is(Tag2())).not.toBeTruthy();

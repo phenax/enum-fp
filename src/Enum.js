@@ -17,20 +17,22 @@ const Enum = sumTypeBody => {
     const isValidPattern = p => !!Object.keys(p).filter(isPatternKey).length;
 
     // cata :: Pattern ~> EnumTagType -> b
-    const cata = patternMap => token => {
-        if (!token || !token.name)       throw new Error('Invalid token passed to match');
-        if(!isValidPattern(patternMap))  throw new Error('Invalid constructor in pattern');
+    const cata = pattern => instance => {
+        if (!instance || !instance.name)
+            throw new Error('Invalid instance passed to match');
+        if(!isValidPattern(pattern))
+            throw new Error('Invalid constructor name in pattern');
 
-        const action = patternMap[token.name];
-        const args = token.args;
+        const action = pattern[instance.name];
 
-        if (!action) return matchToDefault(patternMap, args);
-        return action(...args);
+        return action
+            ? action(...instance.args)
+            : matchToDefault(pattern, instance.args);
     };
 
     let self = {
         // match :: EnumTagType ~> Pattern -> b
-        match: (token, pattern) => cata(pattern)(token),
+        match: (instance, pattern) => cata(pattern)(instance),
         cata,
         caseOf: cata,
         isConstructor,
