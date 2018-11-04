@@ -10,13 +10,13 @@ const mockReducerHook = (reducer, _state) => {
     return [ state, dispatch, () => state ];
 };
 
-const useEnumReducer = createHook({ useReducer: mockReducerHook });
+const useReducer = createHook({ useReducer: mockReducerHook });
 
 const Actions = Enum([ 'A1', 'A2', 'A3' ]);
 
 describe('React', () => {
 
-    describe('useEnumReducer', () => {
+    describe('useReducer', () => {
 
         it('should update state with dispatches', () => {
 
@@ -26,7 +26,7 @@ describe('React', () => {
                 _: () => state => state,
             });
 
-            const [ _, dispatch, getState ] = useEnumReducer(reducer, 0);
+            const [ _, dispatch, getState ] = useReducer(reducer, 0);
             
             expect(getState()).toBe(0);
 
@@ -45,7 +45,7 @@ describe('React', () => {
                 _: () => state => state,
             });
 
-            const [ _, dispatch ] = useEnumReducer(reducer, 0);
+            const [ _, dispatch ] = useReducer(reducer, 0);
 
             expect(() => dispatch(Actions.InvalidAction())).toThrowError();
             expect(() => dispatch(null)).toThrowError();
