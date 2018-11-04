@@ -1,7 +1,7 @@
 // import React from 'react';
 
 import Enum from '../src/Enum';
-import { createHook } from '../src/useEnumReducer';
+import { createHook } from '../src/react/useReducer';
 
 // mockReducerHook :: (a -> a) -> a -> [a, Action -> (), () -> a]
 const mockReducerHook = (reducer, _state) => {
@@ -12,7 +12,7 @@ const mockReducerHook = (reducer, _state) => {
 
 const useEnumReducer = createHook({ useReducer: mockReducerHook });
 
-const Actions = Enum([ 'A1', 'A2', 'A3', 'A4', 'A5' ]);
+const Actions = Enum([ 'A1', 'A2', 'A3' ]);
 
 describe('React', () => {
 
