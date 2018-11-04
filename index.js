@@ -1,2 +1,2 @@
 
-module.exports = require('./build/index');
+module.exports = require('./build/Enum');

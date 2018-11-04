@@ -1,54 +1,48 @@
 
-import { reduceTypeConstructors, prop, error, ConstructorDescription, isArray } from './utils';
+import { reduceTypeConstructors, prop, normalizeSumType, matchToDefault } from './utils';
+
+// type Pattern = Object (a -> b);
 
 // (constructor)
 // Enum :: Array String | Object * -> Enum
-const Enum = constructorDescrMap => {
-    const types = isArray(constructorDescrMap)
-        ? constructorDescrMap.map(name => ConstructorDescription({ name }))
-        : Object.keys(constructorDescrMap)
-            .map(name => ConstructorDescription({ name, props: constructorDescrMap[name] }));
+const Enum = sumTypeBody => {
+    const constructors = normalizeSumType(sumTypeBody);
+    const types = constructors.map(prop(['name']));
+
+    // isConstructor :: String ~> Boolean
+    const isConstructor = c => types.indexOf(c) !== -1 || types.indexOf(c.name) !== -1;
+    // isPatternKey :: String -> Boolean
+    const isPatternKey = c => c === '_' || isConstructor(c);
+    // isValidPattern :: Pattern -> Boolean
+    const isValidPattern = p => !!Object.keys(p).filter(isPatternKey).length;
+
+    // cata :: Pattern ~> EnumTagType -> b
+    const cata = pattern => instance => {
+        if (!instance || !instance.name)
+            throw new Error('Invalid instance passed to match');
+        if(!isValidPattern(pattern))
+            throw new Error('Invalid constructor name in pattern');
+
+        const action = pattern[instance.name];
+
+        return action
+            ? action(...instance.args)
+            : matchToDefault(pattern, instance.args);
+    };
 
     let self = {
-        // types :: Array String
-        types: types.map(prop(['name'])),
-
-        // isValidConstructor :: String -> Boolean
-        isValidConstructor: c => c === '_' || !!self[c],
-
-        // matchToDefault :: Object (...a -> b) -> Array a ~> b
-        matchToDefault: (patternMap, args = []) => {
-            const defaultAction = patternMap._;
-            if(!defaultAction) return error('Missing default case _ for match');
-            return defaultAction(...args);
-        },
-
-        // match :: EnumTagType ~> Object (a -> b) -> b
-        match: (token, patternMap) => {
-            if (!token || !token.name) return error('Invalid token passed to match');
-
-            const isValidPattern = !!Object.keys(patternMap).filter(self.isValidConstructor).length;
-
-            if(!isValidPattern) return error('Invalid constructor in pattern');
-
-            const action = patternMap[token.name];
-            const args = token.args || [];
-
-            if (!action) return self.matchToDefault(patternMap, args);
-            return action(...args);
-        },
-
-        // caseOf :: Object (a -> b) ~> EnumTagType -> b
-        caseOf: patternMap => token => self.match(token, patternMap),
+        // match :: EnumTagType ~> Pattern -> b
+        match: (instance, pattern) => cata(pattern)(instance),
+        cata,
+        caseOf: cata,
+        isConstructor,
     };
 
-    self = {
+    return {
         // {String} :: TypeConstructor
-        ...reduceTypeConstructors(self, types),
+        ...reduceTypeConstructors(self, constructors),
         ...self,
     };
-
-    return self;
 };
 
 export default Enum;

@@ -1,2 +1,2 @@
 
-module.exports = require('../build/reducerComponent');
+module.exports = require('../build/react/reducerComponent');

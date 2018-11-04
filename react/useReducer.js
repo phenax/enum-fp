@@ -1,2 +1,2 @@
 
-module.exports = require('../build/useEnumReducer');
+module.exports = require('../build/react/useEnumReducer');

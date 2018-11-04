@@ -1,5 +1,5 @@
 
-import Enum from '../src';
+import Enum from '../src/Enum';
 
 describe('Enum', () => {
     describe('constructor', () => {
@@ -109,8 +109,37 @@ describe('Enum', () => {
         });
     });
 
-    describe('#caseOf', () => {
-        it('should match the correct function and call it', () => {
+    describe('#caseOf|#cata', () => {
+        const Type = Enum([ 'Add', 'Delete' ]);
+        const action = Type.Add();
+
+        it('(caseOf) should match the correct function and call it', () => {
+
+            const onAdd = jest.fn(() => 'Adding');
+            const result = Type.caseOf({
+                Add: onAdd,
+                Delete: () => 'Deleting',
+                _: () => 'Default',
+            })(action);
+
+            expect(result).toBe('Adding');
+            expect(onAdd).toHaveBeenCalledTimes(1);
+        });
+        it('(cata) should match the correct function and call it', () => {
+            const onAdd = jest.fn(() => 'Adding');
+            const result = Type.cata({
+                Add: onAdd,
+                Delete: () => 'Deleting',
+                _: () => 'Default',
+            })(action);
+
+            expect(result).toBe('Adding');
+            expect(onAdd).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('#isConstructor', () => {
+        it('should return true for the right constructor', () => {
             const Type = Enum([ 'Add', 'Delete' ]);
 
             const action = Type.Add();
