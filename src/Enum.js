@@ -1,36 +1,35 @@
 
 import { reduceTypeConstructors, prop, error, ConstructorDescription, isArray } from './utils';
 
-// matchToDefault :: Object (...a -> b) -> Array a ~> b
+// matchToDefault :: Object (...a -> b) -> [a] -> b
 const matchToDefault = (patternMap, args = []) => {
     const defaultAction = patternMap._;
     if(!defaultAction) return error('Missing default case _ for match');
     return defaultAction(...args);
 };
 
+// normalizeSumType :: Array String | Object [a] -> ConstructorDescription
+const normalizeSumType = sumType =>
+    isArray(sumType)
+        ? sumType.map(name => ConstructorDescription({ name }))
+        : Object.keys(sumType)
+            .map(name => ConstructorDescription({ name, props: sumType[name] }));
+
 // (constructor)
 // Enum :: Array String | Object * -> Enum
 const Enum = sumTypeBody => {
-    const constructors = isArray(sumTypeBody)
-        ? sumTypeBody.map(name => ConstructorDescription({ name }))
-        : Object.keys(sumTypeBody)
-            .map(name => ConstructorDescription({ name, props: sumTypeBody[name] }));
-
+    const constructors = normalizeSumType(sumTypeBody);
     const types = constructors.map(prop(['name']));
+    const isConstructor = c => c === '_' || (types.indexOf(c) !== -1);
+    const isValidPattern = p => !!Object.keys(p).filter(isConstructor).length;
 
     let self = {
-        // isConstructor :: String -> Boolean
-        isConstructor: c => c === '_' || (types.indexOf(c) !== -1),
+        isConstructor,
 
         // match :: EnumTagType ~> Object (a -> b) -> b
         match: (token, patternMap) => {
-            if (!token || !token.name) return error('Invalid token passed to match');
-
-            const isValidPattern = !!Object.keys(patternMap).filter(self.isConstructor).length;
-
-            // console.log('>> patternMap', types, Object.keys(patternMap), Object.keys(patternMap).filter(self.isConstructor));
-
-            if(!isValidPattern) return error('Invalid constructor in pattern');
+            if (!token || !token.name)       throw new Error('Invalid token passed to match');
+            if(!isValidPattern(patternMap))  throw new Error('Invalid constructor in pattern');
 
             const action = patternMap[token.name];
             const args = token.args || [];
@@ -47,7 +46,7 @@ const Enum = sumTypeBody => {
         // {String} :: TypeConstructor
         ...reduceTypeConstructors(self, constructors),
         ...self,
-    };;
+    };
 };
 
 export default Enum;
