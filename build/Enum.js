@@ -19,40 +19,51 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-// EnumType :: Array String | Object * -> EnumType
-var EnumType = function EnumType(enumTokens) {
-  var types = (0, _utils.isArray)(enumTokens) ? enumTokens.map(function (name) {
-    return (0, _utils.EnumToken)({
+// matchToDefault :: Object (...a -> b) -> [a] -> b
+var matchToDefault = function matchToDefault(patternMap) {
+  var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var defaultAction = patternMap._;
+  if (!defaultAction) return (0, _utils.error)('Missing default case _ for match');
+  return defaultAction.apply(void 0, _toConsumableArray(args));
+}; // normalizeSumType :: Array String | Object [a] -> ConstructorDescription
+
+
+var normalizeSumType = function normalizeSumType(sumType) {
+  return (0, _utils.isArray)(sumType) ? sumType.map(function (name) {
+    return (0, _utils.ConstructorDescription)({
       name: name
     });
-  }) : Object.keys(enumTokens).map(function (name) {
-    return (0, _utils.EnumToken)({
+  }) : Object.keys(sumType).map(function (name) {
+    return (0, _utils.ConstructorDescription)({
       name: name,
-      props: enumTokens[name]
+      props: sumType[name]
     });
   });
+}; // (constructor)
+// Enum :: Array String | Object * -> Enum
+
+
+var Enum = function Enum(sumTypeBody) {
+  var constructors = normalizeSumType(sumTypeBody);
+  var types = constructors.map((0, _utils.prop)(['name']));
+
+  var isConstructor = function isConstructor(c) {
+    return c === '_' || types.indexOf(c) !== -1;
+  };
+
+  var isValidPattern = function isValidPattern(p) {
+    return !!Object.keys(p).filter(isConstructor).length;
+  };
+
   var self = {
-    // types :: Array String
-    types: types.map((0, _utils.prop)(['name'])),
-    // isValidConstructor :: String -> Boolean
-    isValidConstructor: function isValidConstructor(c) {
-      return c === '_' || !!self[c];
-    },
-    // matchToDefault :: Object (...a -> b) -> Array a ~> b
-    matchToDefault: function matchToDefault(patternMap) {
-      var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-      var defaultAction = patternMap._;
-      if (!defaultAction) return (0, _utils.error)('Missing default case _ for match');
-      return defaultAction.apply(void 0, _toConsumableArray(args));
-    },
+    isConstructor: isConstructor,
     // match :: EnumTagType ~> Object (a -> b) -> b
     match: function match(token, patternMap) {
-      if (!token || !token.name) return (0, _utils.error)('Invalid token passed to match');
-      var isValidPattern = !!Object.keys(patternMap).filter(self.isValidConstructor).length;
-      if (!isValidPattern) return (0, _utils.error)('Invalid constructor in pattern');
+      if (!token || !token.name) throw new Error('Invalid token passed to match');
+      if (!isValidPattern(patternMap)) throw new Error('Invalid constructor in pattern');
       var action = patternMap[token.name];
       var args = token.args || [];
-      if (!action) return self.matchToDefault(patternMap, args);
+      if (!action) return matchToDefault(patternMap, args);
       return action.apply(void 0, _toConsumableArray(args));
     },
     // caseOf :: Object (a -> b) ~> EnumTagType -> b
@@ -62,9 +73,8 @@ var EnumType = function EnumType(enumTokens) {
       };
     }
   };
-  self = _objectSpread({}, (0, _utils.reduceTypeConstructors)(self, types), self);
-  return self;
+  return _objectSpread({}, (0, _utils.reduceTypeConstructors)(self, constructors), self);
 };
 
-var _default = EnumType;
+var _default = Enum;
 exports.default = _default;

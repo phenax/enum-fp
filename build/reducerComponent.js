@@ -27,9 +27,11 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var reducerComponent = function reducerComponent(_ref) {
-  var state = _ref.state,
-      reducer = _ref.reducer;
+// type State = Object *;
+// type Reducer = EnumTagType -> (State | State -> State);
+// type Config = { state :: State, reducer :: Reducer };
+// reducerComponent :: Config -> React.Component -> React.Component
+var reducerComponent = function reducerComponent(reducer, state) {
   return function (Component) {
     var ReducerComponent =
     /*#__PURE__*/
