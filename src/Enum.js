@@ -20,12 +20,13 @@ const normalizeSumType = sumType =>
 const Enum = sumTypeBody => {
     const constructors = normalizeSumType(sumTypeBody);
     const types = constructors.map(prop(['name']));
+
+    // isConstructor :: String -> Boolean
     const isConstructor = c => c === '_' || (types.indexOf(c) !== -1);
+    // isValidPattern :: Object (a -> b) -> Boolean
     const isValidPattern = p => !!Object.keys(p).filter(isConstructor).length;
 
     let self = {
-        isConstructor,
-
         // match :: EnumTagType ~> Object (a -> b) -> b
         match: (token, patternMap) => {
             if (!token || !token.name)       throw new Error('Invalid token passed to match');
