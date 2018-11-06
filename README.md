@@ -79,7 +79,7 @@ const Action = EnumType({
 
 const state = { count: 0 };
 
-const reducer = Action.caseOf({
+const reducer = Action.cata({
   Increment: by => ({ count }) => ({ count: count + by }),
   Decrement: by => reducer(Action.Increment(-by)),
 });
@@ -105,9 +105,9 @@ const CounterComponent = reducerComponent({ state, reducer })(
 import reducerComponent from 'enum-fp/reducerComponent';
 ```
 
-* Using the new react-hooks (`useEnumReducer`)  ([Docs](./docs/react.md))
+* Using the new react-hooks (`useReducer`)  ([Docs](./docs/react.md))
 ```js
-import useEnumReducer from 'enum-fp/useReducer';
+import useReducer from 'enum-fp/useReducer';
 ```
 
 #### Safely work with empty/invalid states
@@ -121,7 +121,7 @@ const getName = user => user && user.name
   ? Value.Valid(user.name)
   : Value.Invalid();
 
-const splitBySpace = Value.caseOf({
+const splitBySpace = Value.cata({
   Valid: name => name.split(' '),
   Invalid: () => [],
 });
@@ -139,7 +139,7 @@ const Maybe = EnumType({
 });
 
 const fmap = (fn, a) => Maybe.match(a, {
-  Just: value => Maybe.Just(fn(value)),
+  Just: compose(Maybe.Just, fn),
   Nothing: () => a,
 });
 ```
@@ -151,12 +151,12 @@ const Either = EnumType({
   Right: [ 'value' ],
 });
 
-const fmap = (fn, a) => Maybe.match(a, {
+const fmap = (fn, a) => Either.match(a, {
   Left: () => a,
-  Right: value => Maybe.Right(fn(value)),
+  Right: compose(Either.Right, fn),
 });
-const fmapL = (fn, a) => Maybe.match(a, {
-  Left: value => Maybe.Right(fn(value)),
+const fmapL = (fn, a) => Either.match(a, {
+  Left: compose(Either.Right, fn),
   Right: () => a,
 });
 
