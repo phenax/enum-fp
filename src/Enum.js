@@ -35,6 +35,7 @@ const Enum = sumTypeBody => {
         match: (instance, pattern) => cata(pattern)(instance),
         cata,
         caseOf: cata,
+        reduce: cata,
         isConstructor,
     };
 

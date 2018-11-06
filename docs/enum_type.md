@@ -17,25 +17,33 @@ const Canvas = EnumType({
     Clear: [], // 0 arguments. For dynamic number of arguments, use null
 });
 ```
+
+
 ## API
-Constructor
+
+* Constructor
 
 ```haskell
 EnumType :: Object Array | Array String -> EnumType
 ```
-`#{SubType}`
+
+
+* `#{SubType}`
 
 ```javascript
 const point = Canvas.Point(20, 25);
 const circle = Canvas.Circle(20, 50, 50);
 const clearScreen = Canvas.Clear();
 ```
-`#match`
+
+
+* `#match`
 
 Pattern matching for the sub-types
 ```haskell
 match :: (SubType, Object ((...*) -> b)) ~> b
 ```
+
 ```javascript
 const circle = Canvas.Circle(20, 50, 50);
 
@@ -46,15 +54,57 @@ const result = Canvas.match(circle, {
 });
 // `result` is the result of the matched operation
 ```
-`#caseOf`
+
+* `#cata`
 
 An alternate api for match. The arguments are flipped and curried for a nice, point-free experience.
 
 ```haskell
-caseOf :: Object ((...*) -> b) ~> SubType -> b
+cata :: Object ((...*) -> b) ~> SubType -> b
 ```
 ```javascript
+const draw = Canvas.cata({
+    Circle: (radius, x, y) => drawCircle(radius, x, y),
+    Point: (x, y) => drawPoint(x, y),
+    Clear: () => clearCanvasScreen(),
+});
+
+draw(Canvas.Clear());
+draw(Canvas.Circle(20, 50, 50));
+draw(Canvas.Point(20, 25));
+```
+
+
+* `#caseOf`
+
+Alias for cata. Same api as cata.
+
+```haskell
+caseOf :: Object ((...*) -> b) ~> SubType -> b
+```
+
+```javascript
 const draw = Canvas.caseOf({
+    Circle: (radius, x, y) => drawCircle(radius, x, y),
+    Point: (x, y) => drawPoint(x, y),
+    Clear: () => clearCanvasScreen(),
+});
+
+draw(Canvas.Clear());
+draw(Canvas.Circle(20, 50, 50));
+draw(Canvas.Point(20, 25));
+```
+
+
+* `#reduce`
+Alias for cata. Same api as cata.
+
+```haskell
+reduce :: Object ((...*) -> b) ~> SubType -> b
+```
+
+```javascript
+const draw = Canvas.reduce({
     Circle: (radius, x, y) => drawCircle(radius, x, y),
     Point: (x, y) => drawPoint(x, y),
     Clear: () => clearCanvasScreen(),
