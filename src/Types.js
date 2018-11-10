@@ -52,6 +52,7 @@ export const isOfType = type => value => {
             Record: shape => isObject(value) && (shape ? validateRecord(shape, value) : true),
 
             OneOf: typeList => some(typeList, type => isOfType(type)(value)),
+            Enum: Type => value && Type.isConstructor(value),
 
             _: () => false,
         });

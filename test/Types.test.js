@@ -1,3 +1,4 @@
+import Enum from '../src/Enum';
 import T, { isOfType, validateTypes } from '../src/Types';
 
 describe('Types', () => {
@@ -133,6 +134,23 @@ describe('Types', () => {
                 expect(isOfType(numOrStr)(undefined)).toBe(false);
             });
 
+            it('should match Enum', () => {
+                const Maybe = Enum([ 'Just', 'Nothing' ]);
+                const maybeType = T.Enum(Maybe);
+
+                expect(isOfType(maybeType)(Maybe.Just(5))).toBe(true);
+                expect(isOfType(maybeType)(Maybe.Just())).toBe(true);
+                expect(isOfType(maybeType)(Maybe.Nothing())).toBe(true);
+
+                expect(isOfType(maybeType)('Hello world')).toBe(false);
+                expect(isOfType(maybeType)(1)).toBe(false);
+                expect(isOfType(maybeType)([1, 'HEllo'])).toBe(false);
+                expect(isOfType(maybeType)([])).toBe(false);
+                expect(isOfType(maybeType)({})).toBe(false);
+                expect(isOfType(maybeType)(NaN)).toBe(false);
+                expect(isOfType(maybeType)(null)).toBe(false);
+                expect(isOfType(maybeType)(undefined)).toBe(false);
+            });
         });
     });
 });
