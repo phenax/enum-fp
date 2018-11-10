@@ -2,8 +2,8 @@
 import createConstructor from './createConstructor';
 
 // TODO: Sanitize name to alphanumeric value
-// Constructor :: Object -> Constructor
-export const Constructor = ({ name, props }) => ({ name, props });
+// type Constructor = { name :: String, props :: [String] };
+export const Constructor = x => x;
 
 // reduceTypeConstructors :: (Enum, Array Constructor) -> Object EnumAction
 export const reduceTypeConstructors = (Type, constrDescrs) =>
@@ -13,14 +13,14 @@ export const reduceTypeConstructors = (Type, constrDescrs) =>
     }), {});
 
 // prop :: Array -> Object
-export const prop = ([key, ...path], defaultVal) => obj =>
-    (obj || {}).hasOwnProperty(key)
-        ? (path.length ? prop(path, defaultVal)(obj[key]) : obj[key])
-        : defaultVal;
+export const prop = (path, defaultVal) => obj =>
+    path.reduce((newObj, key) =>
+        (newObj || {}).hasOwnProperty(key) ? newObj[key] : defaultVal,
+        obj
+    );
 
 // isArray :: * -> Boolean
-export const isArray = arr =>
-    Object.prototype.toString.call(arr) === '[object Array]';
+export const isArray = arr => ({}).toString.call(arr) === '[object Array]';
 
 // match :: EnumTagType -> Pattern -> b
 export const match = (instance, pattern) => {
