@@ -1,5 +1,6 @@
 
 import { reduceTypeConstructors, prop, normalizeSumType, matchToDefault } from './utils';
+import { matchPattern } from './common-utils';
 
 // type Pattern = Object (a -> b);
 
@@ -22,12 +23,7 @@ const Enum = sumTypeBody => {
             throw new Error('Invalid instance passed to match');
         if(!isValidPattern(pattern))
             throw new Error('Invalid constructor name in pattern');
-
-        const action = pattern[instance.name];
-
-        return action
-            ? action(...instance.args)
-            : matchToDefault(pattern, instance.args);
+        return matchPattern(instance, pattern);
     };
 
     let self = {

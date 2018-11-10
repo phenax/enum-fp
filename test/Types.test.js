@@ -1,5 +1,5 @@
 import Enum from '../src/Enum';
-import T, { isOfType, validateTypes } from '../src/Types';
+import T, { isOfType, validateTypes } from '../src/Type';
 
 describe('Types', () => {
 

@@ -1,8 +1,23 @@
-import Enum from './Enum';
+import { isList, isObject, matchPattern, listToObject } from '../common-utils';
+
+export const all = (list, fn) => list.length === [...list].filter(fn).length;
+export const some = (list, fn) => !![...list].filter(fn).length;
+export const values = obj => Object.keys(obj).sort().map(k => obj[k]);
+
+// Tiny Enum to bypass the 
+const Enum = typeNames => ({
+    match: matchPattern,
+    isConstructor: t => typeNames.indexOf(t) !== -1 || typeNames.indexOf(t.name) !== -1,
+    ...listToObject(
+        name => name,
+        name => (...args) => ({ name, args }),
+        typeNames,
+    ),
+});
 
 // Cant use Type to define Type
 const Type = Enum([
-    'Any', // Avoid using (use description instead)
+    'Any',
     'String',
     'Number',
     'Bool',
@@ -16,19 +31,6 @@ const Type = Enum([
     'OneOf',
 ]);
 
-const all = (list, fn) => list.length === [...list].filter(fn).length;
-const some = (list, fn) => !![...list].filter(fn).length;
-const values = obj => Object.keys(obj).sort().map(k => obj[k]);
-
-const log = (...label) => data => {
-    console.log(...label, data);
-    return data;
-};
-
-// TODO: Make it not just for arrays but also other kinds of lists. Check for iteratability
-const isList = list => Array.isArray(list);
-const isObject = obj => obj && obj.toString() === '[object Object]';
-
 const validateList = (innerType, list) =>
     isList(list) && (
         (innerType && list.length > 0)
@@ -36,8 +38,7 @@ const validateList = (innerType, list) =>
             : true
     );
 
-const validateRecord = (shape, obj) =>
-    validateTypes(values(shape), values(obj));
+export const validateRecord = (shape, obj) => validateArgs(values(shape), values(obj));
 
 export const isOfType = type => value => {
     // Dynamic argument description
@@ -57,18 +58,16 @@ export const isOfType = type => value => {
             Record: shape => isObject(value) && (shape ? validateRecord(shape, value) : true),
 
             OneOf: typeList => some(typeList, type => isOfType(type)(value)),
-            Enum: Type => value && Type.isConstructor(value),
-
-            _: () => false,
+            Enum: InnerType => value && InnerType.isConstructor(value),
         });
     }
 
     return true;
 };
 
-export const validateTypes = ([type, ...types], [val, ...vals]) => {
+export const validateArgs = ([type, ...types], [val, ...vals]) => {
     if(!isOfType(type)(val)) return false;
-    return types.length > 0 ? validateTypes(types, vals) : true;
+    return types.length > 0 ? validateArgs(types, vals) : true;
 };
 
 export default Type;
