@@ -4,14 +4,15 @@ describe('Types', () => {
 
     describe('Create types', () => {
         it('should allow to create instances using all constructors', () => {
+            expect(T.Any().name).toBe('Any');
             expect(T.String().name).toBe('String');
             expect(T.Number().name).toBe('Number');
+
             expect(T.List().name).toBe('List');
             expect(T.Map().name).toBe('Map');
             expect(T.Record().name).toBe('Record');
-            expect(T.Optional().name).toBe('Optional');
+
             expect(T.Enum().name).toBe('Enum');
-            expect(T.Any().name).toBe('Any');
             expect(T.OneOf().name).toBe('OneOf');
         });
     });
@@ -54,7 +55,7 @@ describe('Types', () => {
         });
 
         describe('Record types', () => {
-            it('should match List (record types)', () => {
+            it('should match List', () => {
                 expect(isOfType(T.List())([])).toBe(true);
                 expect(isOfType(T.List())([null])).toBe(true);
                 expect(isOfType(T.List())([undefined])).toBe(true);
@@ -75,7 +76,7 @@ describe('Types', () => {
                 expect(isOfType(T.List())({})).toBe(false);
             });
 
-            it('should match Map (record types)', () => {
+            it('should match Map', () => {
                 expect(isOfType(T.Map(T.String()))({})).toBe(true);
                 expect(isOfType(T.Map(T.String()))({ v: 'Hello' })).toBe(true);
                 expect(isOfType(T.Map(T.String()))({ v: 1 })).toBe(false);
@@ -91,7 +92,7 @@ describe('Types', () => {
                 expect(isOfType(T.Map())({})).toBe(false);
             });
     
-            it('should match Record (record types)', () => {
+            it('should match Record', () => {
                 expect(isOfType(T.Record())([])).toBe(false);
                 expect(isOfType(T.Record())({})).toBe(true);
                 expect(isOfType(T.Record())(null)).toBe(false);
@@ -119,6 +120,19 @@ describe('Types', () => {
                 })).toBe(false);
                 expect(isOfType(T.Record(shape))({ name: 'Hllo world' })).toBe(false);
             });
+        });
+
+        describe('Compound types', () => {
+            it('should match OneOf', () => {
+                const numOrStr = T.OneOf([ T.String(), T.Number() ]);
+                expect(isOfType(numOrStr)(5)).toBe(true);
+                expect(isOfType(numOrStr)('Hello world')).toBe(true);
+                expect(isOfType(numOrStr)([1, 'HEllo'])).toBe(false);
+                expect(isOfType(numOrStr)({})).toBe(false);
+                expect(isOfType(numOrStr)(null)).toBe(false);
+                expect(isOfType(numOrStr)(undefined)).toBe(false);
+            });
+
         });
     });
 });

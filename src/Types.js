@@ -11,12 +11,11 @@ const Type = Enum([
     'Record',
 
     'Enum',
-
-    'Optional',
     'OneOf',
 ]);
 
 const all = (list, fn) => list.length === [...list].filter(fn).length;
+const some = (list, fn) => !![...list].filter(fn).length;
 const getValues = obj => Object.keys(obj).sort().map(k => obj[k]);
 
 const log = (...label) => data => {
@@ -24,7 +23,7 @@ const log = (...label) => data => {
     return data;
 };
 
-// Not just for arrays. TODO: Check for iteratability
+// TODO: Make it not just for arrays but also other kinds of lists. Check for iteratability
 const isList = list => Array.isArray(list);
 const isObject = obj => obj && obj.toString() === '[object Object]';
 
@@ -51,6 +50,8 @@ export const isOfType = type => value => {
             List: innerType => validateList(innerType, value),
             Map: innerType => innerType && isObject(value) && validateList(innerType, getValues(value)),
             Record: shape => isObject(value) && (shape ? validateRecord(shape, value) : true),
+
+            OneOf: typeList => some(typeList, type => isOfType(type)(value)),
 
             _: () => false,
         });
