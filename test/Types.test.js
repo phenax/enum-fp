@@ -53,6 +53,17 @@ describe('Types', () => {
                 expect(isOfType(T.Number())({})).toBe(false);
                 expect(isOfType(T.Number())([])).toBe(false);
             });
+            it('should match boolean', () => {
+                expect(isOfType(T.Bool())(true)).toBe(true);
+                expect(isOfType(T.Bool())(false)).toBe(true);
+                expect(isOfType(T.Bool())(5)).toBe(false);
+                expect(isOfType(T.Bool())(undefined)).toBe(false);
+                expect(isOfType(T.Bool())(null)).toBe(false);
+                expect(isOfType(T.Bool())(NaN)).toBe(false);
+                expect(isOfType(T.Bool())(Infinity)).toBe(false);
+                expect(isOfType(T.Bool())({})).toBe(false);
+                expect(isOfType(T.Bool())([])).toBe(false);
+            });
         });
 
         describe('Record types', () => {

@@ -5,6 +5,7 @@ const Type = Enum([
     'Any', // Avoid using (use description instead)
     'String',
     'Number',
+    'Bool',
 
     'List',
     'Map',
@@ -46,6 +47,7 @@ export const isOfType = type => value => {
             Any: () => true,
             String: () => typeof value === 'string',
             Number: () => typeof value === 'number',
+            Bool: () => typeof value === 'boolean',
 
             List: innerType => validateList(innerType, value),
             Map: innerType => innerType && isObject(value) && validateList(innerType, getValues(value)),
