@@ -11,13 +11,14 @@ const Type = Enum([
     'Map',
     'Record',
 
+    'Func',
     'Enum',
     'OneOf',
 ]);
 
 const all = (list, fn) => list.length === [...list].filter(fn).length;
 const some = (list, fn) => !![...list].filter(fn).length;
-const getValues = obj => Object.keys(obj).sort().map(k => obj[k]);
+const values = obj => Object.keys(obj).sort().map(k => obj[k]);
 
 const log = (...label) => data => {
     console.log(...label, data);
@@ -35,7 +36,8 @@ const validateList = (innerType, list) =>
             : true
     );
 
-const validateRecord = (shape, obj) => validateTypes(getValues(shape), getValues(obj));
+const validateRecord = (shape, obj) =>
+    validateTypes(values(shape), values(obj));
 
 export const isOfType = type => value => {
     // Dynamic argument description
@@ -48,9 +50,10 @@ export const isOfType = type => value => {
             String: () => typeof value === 'string',
             Number: () => typeof value === 'number',
             Bool: () => typeof value === 'boolean',
+            Func: () => typeof value === 'function',
 
             List: innerType => validateList(innerType, value),
-            Map: innerType => innerType && isObject(value) && validateList(innerType, getValues(value)),
+            Map: innerType => innerType && isObject(value) && validateList(innerType, values(value)),
             Record: shape => isObject(value) && (shape ? validateRecord(shape, value) : true),
 
             OneOf: typeList => some(typeList, type => isOfType(type)(value)),
@@ -63,9 +66,9 @@ export const isOfType = type => value => {
     return true;
 };
 
-export const validateTypes = ([type, ...types], [value, ...values]) => {
-    if(!isOfType(type)(value)) return false;
-    return types.length > 0 ? validateTypes(types, values) : true;
+export const validateTypes = ([type, ...types], [val, ...vals]) => {
+    if(!isOfType(type)(val)) return false;
+    return types.length > 0 ? validateTypes(types, vals) : true;
 };
 
 export default Type;

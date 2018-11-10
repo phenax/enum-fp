@@ -53,6 +53,7 @@ describe('Types', () => {
                 expect(isOfType(T.Number())({})).toBe(false);
                 expect(isOfType(T.Number())([])).toBe(false);
             });
+
             it('should match boolean', () => {
                 expect(isOfType(T.Bool())(true)).toBe(true);
                 expect(isOfType(T.Bool())(false)).toBe(true);
@@ -63,6 +64,21 @@ describe('Types', () => {
                 expect(isOfType(T.Bool())(Infinity)).toBe(false);
                 expect(isOfType(T.Bool())({})).toBe(false);
                 expect(isOfType(T.Bool())([])).toBe(false);
+            });
+
+            it('should match function', () => {
+                expect(isOfType(T.Func())(() => null)).toBe(true);
+                expect(isOfType(T.Func())(function() {})).toBe(true);
+                expect(isOfType(T.Func())(class {})).toBe(true);
+                expect(isOfType(T.Func())(true)).toBe(false);
+                expect(isOfType(T.Func())(false)).toBe(false);
+                expect(isOfType(T.Func())(5)).toBe(false);
+                expect(isOfType(T.Func())(undefined)).toBe(false);
+                expect(isOfType(T.Func())(null)).toBe(false);
+                expect(isOfType(T.Func())(NaN)).toBe(false);
+                expect(isOfType(T.Func())(Infinity)).toBe(false);
+                expect(isOfType(T.Func())({})).toBe(false);
+                expect(isOfType(T.Func())([])).toBe(false);
             });
         });
 
