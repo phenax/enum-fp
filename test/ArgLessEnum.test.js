@@ -1,5 +1,5 @@
 
-import Enum from '../src/Type/ArgLessEnum';
+import Enum from '../src/ArgLessEnum';
 
 describe('Enum', () => {
     describe('constructor', () => {
