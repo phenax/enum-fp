@@ -1,4 +1,4 @@
-import { isList, isObject, matchPattern, listToObject, isConstructor } from '../common-utils';
+import { isList, isObject, listToObject, isConstructor } from '../common-utils';
 import ArgLessEnum from '../ArgLessEnum';
 
 export const all = (list, fn) => list.length === [...list].filter(fn).length;

@@ -4,11 +4,15 @@ export const isArray = arr => Object.prototype.toString.call(arr) === '[object A
 
 export const isObject = obj => obj && obj.toString() === '[object Object]';
 
-// matchPattern ::  (EnumTagType, Object (a -> b)) -> b
-export const matchPattern = (t, pattern) => {
-    const action = pattern[t.name] || pattern._;
-    if(!action) throw new Error('Pattern passed is non exhaustive. Please pass a fallback case `_`.');
-    return action(...t.args);
+// match :: EnumTagType -> Pattern -> b
+export const match = (instance, pattern) => {
+    if (!instance || !instance.name) throw new Error('Invalid instance passed');
+
+    const action = pattern[instance.name] || pattern._;
+
+    if(!action) throw new Error('Non-Exhaustive pattern. You must pass fallback case `_` in the pattern');
+
+    return action(...instance.args);
 };
 
 // TODO: Make it not just for arrays but also other kinds of lists. Check for iteratability

@@ -1,9 +1,9 @@
 
-import { matchPattern, listToObject, isConstructor } from './common-utils';
+import { match, listToObject, isConstructor } from './common-utils';
 
 // Tiny Enum to bypass the circular dependency shithole
 const Enum = typeNames => ({
-    match: matchPattern,
+    match,
     isConstructor: isConstructor(typeNames),
     ...listToObject(
         name => name,

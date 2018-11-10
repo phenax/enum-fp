@@ -3,15 +3,10 @@ import createConstructor from './createConstructor';
 import { isArray, listToObject } from './common-utils';
 
 // TODO: Sanitize name to alphanumeric value
-// type ConstructorDescription = { name: String, props: [Type|String] };
+// type Constructor = { name: String, props: [Type|String] };
+export const Constructor = x => x;
 
-// prop :: Array -> Object
-export const prop = ([key, ...path], defaultVal) => obj =>
-    (obj || {}).hasOwnProperty(key)
-        ? (path.length ? prop(path, defaultVal)(obj[key]) : obj[key])
-        : defaultVal;
-
-// reduceTypeConstructors :: (Enum, Array ConstructorDescription) -> Object EnumAction
+// reduceTypeConstructors :: (Enum, Array Constructor) -> Object EnumAction
 export const reduceTypeConstructors = (Type, constrDescrs) =>
     listToObject(
         prop(['name']),
@@ -19,9 +14,16 @@ export const reduceTypeConstructors = (Type, constrDescrs) =>
         constrDescrs,
     );
 
-// normalizeSumType :: Array String | Object [a] -> ConstructorDescription
+// prop :: Array -> Object
+export const prop = (path, defaultVal) => obj =>
+    path.reduce((newObj, key) =>
+        (newObj || {}).hasOwnProperty(key) ? newObj[key] : defaultVal,
+        obj
+    );
+
+// normalizeSumType :: Array String | Object [a] -> Constructor
 export const normalizeSumType = sumType =>
     isArray(sumType)
-        ? sumType.map(name => ({ name }))
+        ? sumType.map(name => Constructor({ name }))
         : Object.keys(sumType)
-            .map(name => ({ name, props: sumType[name] }));
+            .map(name => Constructor({ name, props: sumType[name] }));
