@@ -1,8 +1,6 @@
-import { isList, isObject, listToObject, isConstructor } from '../common-utils';
-import ArgLessEnum from '../ArgLessEnum';
+import { isList, isObject, listToObject, isConstructor } from './common-utils';
+import ArgLessEnum from './ArgLessEnum';
 
-export const all = (list, fn) => list.length === [...list].filter(fn).length;
-export const some = (list, fn) => !![...list].filter(fn).length;
 export const values = obj => Object.keys(obj).sort().map(k => obj[k]);
 
 // Cant use Type to define Type
@@ -24,7 +22,7 @@ const Type = ArgLessEnum([
 const validateList = (innerType, list) =>
     isList(list) && (
         (innerType && list.length > 0)
-            ? all(list, isOfType(innerType))
+            ? list.length === [...list].filter(isOfType(innerType)).length
             : true
     );
 
@@ -47,7 +45,7 @@ export const isOfType = type => value => {
             Map: innerType => innerType && isObject(value) && validateList(innerType, values(value)),
             Record: shape => isObject(value) && (shape ? validateRecord(shape, value) : true),
 
-            OneOf: typeList => some(typeList, type => isOfType(type)(value)),
+            OneOf: typeList => !![...typeList].filter(type => isOfType(type)(value)).length,
             Enum: InnerType => value && InnerType.isConstructor(value),
         });
     }
@@ -55,10 +53,12 @@ export const isOfType = type => value => {
     return true;
 };
 
-export const validateArgs = ([type, ...types], [val, ...vals]) => {
-    if(!isOfType(type)(val)) return false;
-    return types.length > 0 ? validateArgs(types, vals) : true;
-};
+export const validateArgs = ([type, ...types], [val, ...vals]) =>
+    !isOfType(type)(val)
+        ? false
+        : types.length > 0
+            ? validateArgs(types, vals)
+            : true;
 
 export default Type;
 
