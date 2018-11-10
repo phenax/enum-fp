@@ -1,6 +1,6 @@
 
 import { reduceTypeConstructors, prop, normalizeSumType, matchToDefault } from './utils';
-import { matchPattern } from './common-utils';
+import { matchPattern, isConstructor as isConstr } from './common-utils';
 
 // type Pattern = Object (a -> b);
 
@@ -11,7 +11,7 @@ const Enum = sumTypeBody => {
     const types = constructors.map(prop(['name']));
 
     // isConstructor :: String ~> Boolean
-    const isConstructor = c => types.indexOf(c) !== -1 || types.indexOf(c.name) !== -1;
+    const isConstructor = isConstr(types);
     // isPatternKey :: String -> Boolean
     const isPatternKey = c => c === '_' || isConstructor(c);
     // isValidPattern :: Pattern -> Boolean

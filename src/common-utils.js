@@ -17,3 +17,5 @@ export const isList = isArray;
 // listToObject :: (a -> String, a -> b, [a]) -> Object b
 export const listToObject = (toKey, toValue, list) =>
     list.reduce((obj, item) => ({ ...obj, [toKey(item)]: toValue(item) }), {});
+
+export const isConstructor = constructors => t => constructors.indexOf(t) !== -1 || constructors.indexOf(t.name) !== -1

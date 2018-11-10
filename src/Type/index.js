@@ -1,22 +1,12 @@
-import { isList, isObject, matchPattern, listToObject } from '../common-utils';
+import { isList, isObject, matchPattern, listToObject, isConstructor } from '../common-utils';
+import ArgLessEnum from './ArgLessEnum';
 
 export const all = (list, fn) => list.length === [...list].filter(fn).length;
 export const some = (list, fn) => !![...list].filter(fn).length;
 export const values = obj => Object.keys(obj).sort().map(k => obj[k]);
 
-// Tiny Enum to bypass the 
-const Enum = typeNames => ({
-    match: matchPattern,
-    isConstructor: t => typeNames.indexOf(t) !== -1 || typeNames.indexOf(t.name) !== -1,
-    ...listToObject(
-        name => name,
-        name => (...args) => ({ name, args }),
-        typeNames,
-    ),
-});
-
 // Cant use Type to define Type
-const Type = Enum([
+const Type = ArgLessEnum([
     'Any',
     'String',
     'Number',
