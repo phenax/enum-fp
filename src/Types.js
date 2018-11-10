@@ -6,7 +6,7 @@ const Type = Enum([
     'Number',
 
     'List',
-    'Object',
+    'Map',
     'Record',
 
     'Enum',
@@ -17,7 +17,7 @@ const Type = Enum([
 ]);
 
 const all = (list, fn) => list.length === [...list].filter(fn).length;
-const values = obj => Object.keys(obj).sort().map(k => obj[k]);
+const getValues = obj => Object.keys(obj).sort().map(k => obj[k]);
 
 const log = (...label) => data => {
     console.log(...label, data);
@@ -26,7 +26,7 @@ const log = (...label) => data => {
 
 // Not just for arrays. TODO: Check for iteratability
 const isList = list => Array.isArray(list);
-const isObject = obj => !!obj && obj.toString() === '[object Object]';
+const isObject = obj => obj && obj.toString() === '[object Object]';
 
 const validateList = (innerType, list) =>
     isList(list) && (
@@ -35,7 +35,7 @@ const validateList = (innerType, list) =>
             : true
     );
 
-const validateRecord = (shape, obj) => validateTypes(values(shape), values(obj));
+const validateRecord = (shape, obj) => validateTypes(getValues(shape), getValues(obj));
 
 export const isOfType = type => value => {
     // Dynamic argument description
@@ -43,11 +43,12 @@ export const isOfType = type => value => {
         return true;
 
     if (Type.isConstructor(type)) {
-        return Type.match(type, {
+        return !!Type.match(type, {
             String: () => typeof value === 'string',
             Number: () => typeof value === 'number',
 
             List: innerType => validateList(innerType, value),
+            Map: innerType => innerType && isObject(value) && validateList(innerType, getValues(value)),
             Record: shape => isObject(value) && (shape ? validateRecord(shape, value) : true),
             _: () => false,
         });
