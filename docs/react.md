@@ -1,28 +1,25 @@
-# useEnumReducer react hook (React 16.7)
+# Create a react hook (React > 16.7) [Recommended]
 
 ## Usage
 
 ```javascript
-import useEnumReducer from 'enum-fp/useEnumReducer';
-const Component = () => {
-    const [state, dispatch] = useEnumReducer(reducer, initialState);
-    return /* whatever */;
-};
+// A wrapper for React's useReducer react hook
+import { useReducer as useReactReducer } from 'react';
+
+export const useReducer = (reducer, initialState) =>
+  useReactReducer((state, action) => reducer(action)(state), initialState);
 ```
 
 ## API
 
 ```haskell
-useEnumReducer :: (SubType -> State, State) -> [State, SubType -> ()]
+useReducer :: (SubType -> State, State) -> [State, SubType -> ()]
 ```
 
 ## Example usage
 
 ```javascript
-import EnumType from 'enum-fp';
-import useEnumReducer from 'enum-fp/useReducer';
-
-const Action = EnumType({
+const Action = Enum({
   Increment: ['by'],
   Decrement: ['by'],
 });
@@ -35,7 +32,7 @@ const reducer = Action.caseOf({
 });
 
 const CounterComponent = () => {
-  const [{ count }, dispatch] = useEnumReducer(reducer, initialState);
+  const [{ count }, dispatch] = useReducer(reducer, initialState);
   return (
     <div>
       <div>{count}</div>
@@ -46,20 +43,26 @@ const CounterComponent = () => {
 }
 ```
 
+
 # reducerComponent HOC
 
 ## Usage
 
 ```javascript
-import reducerComponent from 'enum-fp/reducerComponent';
-reducerComponent({ state, reducer })(Component);
+export const reducerComponent = (reducer, state) => Component =>
+  class ReducerComponent extends React.Component {
+    static displayName = `ReducerComponent(${Component.displayName || Component.name || 'Unknown'})`;
+
+    state = { ...state };
+    dispatch = action => this.setState(reducer(action));
+    render = () => <Component {...this.props} dispatch={this.dispatch} state={this.state} />;
+  };
 ```
 
 ## API
 
 ```haskell
-type Config = { state: State, reducer: State -> State }
-reducerComponent :: Config -> Component -> Component
+reducerComponent :: (State -> State, State) -> Component -> Component
 ```
 
 The passed component will receive the following additional props
@@ -76,10 +79,7 @@ dispatch :: SubType -> ()
 ## Example usage
 
 ```javascript
-import EnumType from 'enum-fp';
-import reducerComponent from 'enum-fp/reducerComponent';
-
-const Action = EnumType({
+const Action = Enum({
   Increment: ['by'],
   Decrement: ['by'],
 });
