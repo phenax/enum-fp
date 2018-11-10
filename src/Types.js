@@ -2,6 +2,7 @@ import Enum from './Enum';
 
 // Cant use Type to define Type
 const Type = Enum([
+    'Any', // Avoid using (use description instead)
     'String',
     'Number',
 
@@ -11,7 +12,6 @@ const Type = Enum([
 
     'Enum',
 
-    'Any', // Avoid using (use description instead)
     'Optional',
     'OneOf',
 ]);
@@ -44,12 +44,14 @@ export const isOfType = type => value => {
 
     if (Type.isConstructor(type)) {
         return !!Type.match(type, {
+            Any: () => true,
             String: () => typeof value === 'string',
             Number: () => typeof value === 'number',
 
             List: innerType => validateList(innerType, value),
             Map: innerType => innerType && isObject(value) && validateList(innerType, getValues(value)),
             Record: shape => isObject(value) && (shape ? validateRecord(shape, value) : true),
+
             _: () => false,
         });
     }

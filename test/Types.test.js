@@ -19,6 +19,17 @@ describe('Types', () => {
     describe('isOfType', () => {
 
         describe('Basic types', () => {
+            it('should match ANY', () => {
+                expect(isOfType(T.Any())('Hello world')).toBe(true);
+                expect(isOfType(T.Any())(5)).toBe(true);
+                expect(isOfType(T.Any())(undefined)).toBe(true);
+                expect(isOfType(T.Any())(null)).toBe(true);
+                expect(isOfType(T.Any())(NaN)).toBe(true);
+                expect(isOfType(T.Any())(Infinity)).toBe(true);
+                expect(isOfType(T.Any())({})).toBe(true);
+                expect(isOfType(T.Any())([])).toBe(true);
+            });
+
             it('should match string', () => {
                 expect(isOfType(T.String())('Hello world')).toBe(true);
                 expect(isOfType(T.String())(5)).toBe(false);
