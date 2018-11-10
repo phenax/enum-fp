@@ -2,7 +2,7 @@
 // type TypeConstructor = ...a -> EnumTagType
 
 // createConstructor :: (Enum, ConstructorDescription) -> TypeConstructor
-export const createConstructor = (Type, { name, props }) => (...args) => {
+const createConstructor = (Type, { name, props }) => (...args) => {
     if(props ? props.length !== args.length : false)
         throw new TypeError(`Invalid number of args passed to constructor ${name}`);
 

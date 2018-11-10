@@ -1,7 +1,7 @@
 
 import Enum from '../src/Enum';
 import createConstructor from '../src/createConstructor';
-import { ConstructorDescription as Constr } from '../src/utils';
+import { Constructor as Constr } from '../src/utils';
 
 const TestType = Enum([ 'Type', 'TypeWithArgs', 'Tag', 'NewTag' ]);
 

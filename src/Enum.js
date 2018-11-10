@@ -1,5 +1,5 @@
 
-import { reduceTypeConstructors, prop, normalizeSumType, matchToDefault } from './utils';
+import { reduceTypeConstructors, prop, normalizeSumType, match } from './utils';
 
 // type Pattern = Object (a -> b);
 
@@ -11,28 +11,12 @@ const Enum = sumTypeBody => {
 
     // isConstructor :: String ~> Boolean
     const isConstructor = c => types.indexOf(c) !== -1 || types.indexOf(c.name) !== -1;
-    // isPatternKey :: String -> Boolean
-    const isPatternKey = c => c === '_' || isConstructor(c);
-    // isValidPattern :: Pattern -> Boolean
-    const isValidPattern = p => !!Object.keys(p).filter(isPatternKey).length;
 
     // cata :: Pattern ~> EnumTagType -> b
-    const cata = pattern => instance => {
-        if (!instance || !instance.name)
-            throw new Error('Invalid instance passed to match');
-        if(!isValidPattern(pattern))
-            throw new Error('Invalid constructor name in pattern');
-
-        const action = pattern[instance.name];
-
-        return action
-            ? action(...instance.args)
-            : matchToDefault(pattern, instance.args);
-    };
+    const cata = pattern => instance => match(instance, pattern);
 
     let self = {
-        // match :: EnumTagType ~> Pattern -> b
-        match: (instance, pattern) => cata(pattern)(instance),
+        match,
         cata,
         caseOf: cata,
         reduce: cata,
