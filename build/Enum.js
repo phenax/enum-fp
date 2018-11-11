@@ -6,4 +6,4 @@ name:name,// props :: ?Array String
 props:props,// is :: String | EnumTagType | ConstructorDescription ~> Boolean
 is:function is(otherType){return[otherType,otherType.name].indexOf(name)!==-1},// match :: Object (* -> b) ~> b
 match:function match(pattern){return Type.match(self,pattern)}};return self}};// Enum :: Array String | Object * -> Enum
-exports.createConstructor=createConstructor;var _default=(0,_utils.createEnumConstructor)({createConstructor:createConstructor});exports.default=_default;
+exports.createConstructor=createConstructor;var _default=(0,_utils.createEnumFactory)({createConstructor:createConstructor});exports.default=_default;
