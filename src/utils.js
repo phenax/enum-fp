@@ -16,7 +16,7 @@ export const reduceTypeConstructors = (Type, constrDescrs) =>
 export const prop = (path, defaultVal) => obj =>
     path.reduce((newObj, key) =>
         (newObj || {}).hasOwnProperty(key) ? newObj[key] : defaultVal,
-        obj
+    obj
     );
 
 // isArray :: * -> Boolean
