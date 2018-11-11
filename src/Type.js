@@ -1,9 +1,15 @@
-import { isList, isObject, listToObject, isConstructor } from './common-utils';
-import ArgLessEnum from './ArgLessEnum';
+import { isList, isObject, listToObject, isConstructor, createEnumConstructor } from './utils';
+
+// Tiny ArgLessEnum to bypass the circular dependency shithole
+const ArgLessEnum = createEnumConstructor({
+    createConstructor: (Type, constr) => (...args) => ({ ...constr, args }),
+});
 
 export const values = obj => Object.keys(obj).sort().map(k => obj[k]);
 
-// Cant use Type to define Type
+// type Type = Type|String;
+
+// Cant use Type to define Type so ArgLessEnum
 const Type = ArgLessEnum([
     'Any',
     'String',
@@ -19,6 +25,7 @@ const Type = ArgLessEnum([
     'OneOf',
 ]);
 
+// validateList :: (Type, [a]) -> Boolean
 const validateList = (innerType, list) =>
     isList(list) && (
         (innerType && list.length > 0)
@@ -26,8 +33,10 @@ const validateList = (innerType, list) =>
             : true
     );
 
+// validateRecord :: Object Type -> Object a -> Boolean
 export const validateRecord = (shape, obj) => validateArgs(values(shape), values(obj));
 
+// isOfType :: Type -> a -> Boolean
 export const isOfType = type => value => {
     // Dynamic argument description
     if(typeof type === 'string' && value !== undefined)
@@ -50,15 +59,20 @@ export const isOfType = type => value => {
         });
     }
 
-    return true;
+    return false;
 };
 
-export const validateArgs = ([type, ...types], [val, ...vals]) =>
-    !isOfType(type)(val)
-        ? false
-        : types.length > 0
-            ? validateArgs(types, vals)
-            : true;
+// validateArgs :: ([Type], [a]) -> Bool
+export const validateArgs = (typeList, valueList) => {
+    if(typeList.length !== valueList.length) return false;
+
+    const [type, ...types] = typeList;
+    const [val, ...vals] = valueList;
+
+    if(!isOfType(type)(val)) return false;
+
+    return types.length > 0 ? validateArgs(types, vals) : true;
+}
 
 export default Type;
 

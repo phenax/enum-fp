@@ -2,12 +2,9 @@ import { validateArgs } from './Type';
 
 // type TypeConstructor = ...a -> EnumTagType
 
-const validate = (props, args) =>
-    props.length === args.length && validateArgs(props, args);
-
 // createConstructor :: (Enum, ConstructorDescription) -> TypeConstructor
 export const createConstructor = (Type, { name, props }) => (...args) => {
-    if(props ? !validate(props, args) : false)
+    if(props ? !validateArgs(props, args) : false)
         throw new TypeError(`Invalid number of args passed to constructor ${name}`);
 
     const self = {
