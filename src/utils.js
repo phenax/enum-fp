@@ -17,17 +17,8 @@ export const normalizeSumType = sumType =>
         : Object.keys(sumType)
             .map(name => Constructor({ name, props: sumType[name] }));
 
-
-const isObjectOfType = typeName => a => ({}).toString.call(a) === `[object ${typeName}]`;
-
-// isList :: * -> Boolean
-export const isList = isObjectOfType('Array');
-
-// isObject:: * -> Boolean[object 
-export const isObject = isObjectOfType('Object');
-
 // match :: EnumTagType -> Pattern -> b
-export const match = (instance, pattern) => {
+const match = (instance, pattern) => {
     if (!instance || !instance.name) throw new Error('Invalid instance passed');
 
     const action = pattern[instance.name] || pattern._;
@@ -38,17 +29,17 @@ export const match = (instance, pattern) => {
 };
 
 // listToObject :: (a -> String, a -> b, [a]) -> Object b
-export const listToObject = (toKey, toValue, list) =>
+const listToObject = (toKey, toValue, list) =>
     list.reduce((obj, item) => ({ ...obj, [toKey(item)]: toValue(item) }), {});
 
-export const isConstructor = constructors => t => constructors.indexOf(t) !== -1 || constructors.indexOf(t.name) !== -1
-
-
+// createEnumConstructor :: Options -> Array String | Object Type -> Enum
 export const createEnumConstructor = options => sumTypeBody => {
     const constructors = normalizeSumType(sumTypeBody);
     const { createConstructor } = options;
 
-    const isConstr = isConstructor(constructors.map(prop(['name'])));
+    const typeNames = constructors.map(prop(['name']));
+    const isConstr = t =>
+        typeNames.indexOf(t) !== -1 || typeNames.indexOf(t.name) !== -1;
 
     // cata :: Pattern ~> EnumTagType -> b
     const cata = pattern => instance => match(instance, pattern);
@@ -73,3 +64,10 @@ export const createEnumConstructor = options => sumTypeBody => {
         ...self,
     };
 };
+
+
+const isObjectOfType = typeName => a => ({}).toString.call(a) === `[object ${typeName}]`;
+// isList :: * -> Boolean
+export const isList = isObjectOfType('Array');
+// isObject:: * -> Boolean[object 
+export const isObject = isObjectOfType('Object');

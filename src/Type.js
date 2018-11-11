@@ -1,4 +1,4 @@
-import { isList, isObject, listToObject, isConstructor, createEnumConstructor } from './utils';
+import { isList, isObject, isConstructor, createEnumConstructor } from './utils';
 
 // Tiny ArgLessEnum to bypass the circular dependency shithole
 const ArgLessEnum = createEnumConstructor({
