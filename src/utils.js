@@ -2,11 +2,10 @@
 export const Constructor = x => x;
 
 // prop :: Array -> Object
-export const prop = (path, defaultVal) => obj =>
-    path.reduce((newObj, key) =>
-        (newObj || {}).hasOwnProperty(key) ? newObj[key] : defaultVal,
-        obj
-    );
+export const prop = (path, defaultVal) => obj => path.reduce(
+    (o, key) => (o || {}).hasOwnProperty(key) ? o[key] : defaultVal,
+    obj,
+);
 
 // normalizeSumType :: Array String | Object [a] -> Constructor
 const normalizeSumType = sumType =>
