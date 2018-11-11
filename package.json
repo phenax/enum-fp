@@ -17,7 +17,7 @@
     "switch"
   ],
   "scripts": {
-    "build": "babel src --out-dir build --minified",
+    "build": "babel src --out-dir build --minified --compact --no-comments --delete-dir-on-start",
     "watch": "yarn build --watch",
     "lint": "eslint ./src",
     "test": "jest",
