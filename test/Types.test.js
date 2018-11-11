@@ -1,5 +1,5 @@
 import Enum from '../src/Enum';
-import T, { isOfType, validateTypes } from '../src/Type';
+import T, { isOfType, validateArgs, validateRecord } from '../src/Type';
 
 describe('Types', () => {
 
@@ -178,6 +178,131 @@ describe('Types', () => {
                 expect(isOfType(maybeType)(null)).toBe(false);
                 expect(isOfType(maybeType)(undefined)).toBe(false);
             });
+        });
+    });
+
+    describe('validateArgs', () => {
+        it('should validate list', () => {
+            const props = [ T.String(), T.Number(), T.Bool(), T.Any() ];
+            expect(validateArgs(props, ['2', 3, true, 5])).toBe(true);
+            expect(validateArgs(props, ['2', 3, false, '5'])).toBe(true);
+            expect(validateArgs(props, ['2', 3, 5, '5'])).toBe(false);
+            expect(validateArgs(props, [2, '4', false, '5'])).toBe(false);
+            expect(validateArgs(props, ['2', null, false, '5'])).toBe(false);
+
+            expect(validateArgs(props, ['2', 3, true])).toBe(false);
+            expect(validateArgs(props, ['2', 3, true, new RegExp()])).toBe(true);
+        });
+    });
+
+    describe('validateRecord', () => {
+        it('should validate any shape (nested shape)', () => {
+            const UserShape = {
+                name: T.String(),
+                age: T.Number(),
+                data: 'someData',
+                dob: T.Record({
+                    date: T.Number(),
+                    month: T.Number(),
+                    year: T.Number(),
+                }),
+            };
+
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 'fire',
+                dob: {
+                    date: 1,
+                    month: 5,
+                    year: 1997,
+                },
+            })).toBe(true);
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: '21',
+                data: 5,
+                dob: {
+                    date: 1,
+                    month: 5,
+                    year: 1997,
+                },
+            })).toBe(false);
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 5,
+            })).toBe(false);
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 'fire',
+                dob: {
+                    date: 1,
+                    month: 5,
+                },
+            })).toBe(false);
+        });
+
+        it('should validate any shape (with list)', () => {
+            const UserShape = {
+                name: T.String(),
+                age: T.Number(),
+                data: 'someData',
+                comments: T.List(T.Record({
+                    message: T.String(),
+                    date: T.String(),
+                })),
+            };
+
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 'fire',
+                comments: [],
+            })).toBe(true);
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 'fire',
+                comments: [
+                    { message: 'Helo world', date: 'today' },
+                ],
+            })).toBe(true);
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 'fire',
+                comments: [
+                    { message: 'Helo world', date: 5 },
+                ],
+            })).toBe(false);
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 'fire',
+                comments: [
+                    { message: 'Helo world', date: 'today' },
+                    { message: 'Helo world', date: 'today' },
+                    { message: 'Helo world', date: 5 },
+                ],
+            })).toBe(false);
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 'fire',
+                comments: [
+                    { message: 'Helo world' },
+                ],
+            })).toBe(false);
+            expect(validateRecord(UserShape, {
+                name: 'Akshay Nair',
+                age: 21,
+                data: 'fire',
+                comments: [
+                    20,
+                ],
+            })).toBe(false);
         });
     });
 });

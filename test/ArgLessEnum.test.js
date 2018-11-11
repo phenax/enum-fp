@@ -1,7 +1,7 @@
 
 import Enum from '../src/ArgLessEnum';
 
-describe('Enum', () => {
+describe('ArgLessEnum', () => {
     describe('constructor', () => {
         it('should return an instance without errors', () => {
             const instance = Enum([ 'Action1', 'Action2' ]);
