@@ -1,6 +1,4 @@
-
-// TODO: Sanitize name to alphanumeric value
-// type Constructor = { name: String, props: [Type|String] };
+// data Constructor = { name: String, props: [Type|String] };
 export const Constructor = x => x;
 
 // prop :: Array -> Object
@@ -11,7 +9,7 @@ export const prop = (path, defaultVal) => obj =>
     );
 
 // normalizeSumType :: Array String | Object [a] -> Constructor
-export const normalizeSumType = sumType =>
+const normalizeSumType = sumType =>
     isList(sumType)
         ? sumType.map(name => Constructor({ name }))
         : Object.keys(sumType)
@@ -32,8 +30,8 @@ const match = (instance, pattern) => {
 const listToObject = (toKey, toValue, list) =>
     list.reduce((obj, item) => ({ ...obj, [toKey(item)]: toValue(item) }), {});
 
-// createEnumConstructor :: Options -> Array String | Object Type -> Enum
-export const createEnumConstructor = options => sumTypeBody => {
+// createEnumFactory :: Options -> Array String | Object Type -> Enum
+export const createEnumFactory = options => sumTypeBody => {
     const constructors = normalizeSumType(sumTypeBody);
     const { createConstructor } = options;
 
@@ -71,3 +69,5 @@ const isObjectOfType = typeName => a => ({}).toString.call(a) === `[object ${typ
 export const isList = isObjectOfType('Array');
 // isObject:: * -> Boolean[object 
 export const isObject = isObjectOfType('Object');
+
+export const values = obj => Object.keys(obj).sort().map(k => obj[k]);

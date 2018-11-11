@@ -1,5 +1,4 @@
-
-import { createEnumConstructor } from './utils';
+import { createEnumFactory } from './utils';
 import { validateArgs } from './Type';
 
 // type TypeConstructor = ...a -> EnumTagType
@@ -25,4 +24,4 @@ export const createConstructor = (Type, { name, props }) => (...args) => {
 };
 
 // Enum :: Array String | Object * -> Enum
-export default createEnumConstructor({ createConstructor });
+export default createEnumFactory({ createConstructor });

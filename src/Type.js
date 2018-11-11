@@ -1,11 +1,9 @@
-import { isList, isObject, isConstructor, createEnumConstructor } from './utils';
+import { values, isList, isObject, createEnumFactory } from './utils';
 
 // Tiny ArgLessEnum to bypass the circular dependency shithole
-const ArgLessEnum = createEnumConstructor({
+const ArgLessEnum = createEnumFactory({
     createConstructor: (Type, constr) => (...args) => ({ ...constr, args }),
 });
-
-export const values = obj => Object.keys(obj).sort().map(k => obj[k]);
 
 // type Type = Type|String;
 
@@ -72,7 +70,7 @@ export const validateArgs = (typeList, valueList) => {
     if(!isOfType(type)(val)) return false;
 
     return types.length > 0 ? validateArgs(types, vals) : true;
-}
+};
 
 export default Type;
 
