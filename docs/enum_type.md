@@ -9,11 +9,15 @@ const Maybe = EnumType({
     Nothing: [],
 });
 ```
-You can also specify and document the number of arguments for the constructor
+
+You can also specify and document the arguments for the constructor using [enum-fp/types](./type.md)
 ```javascript
-const Canvas = EnumType({
-    Point: [ 'x', 'y' ],
-    Circle: [ 'radius', 'x', 'y' ],
+import Enum, { T } from 'enum-fp';
+
+const CanvasObject = EnumType({
+    Point: [ T.Number('x'), T.Number('y') ], // Fixed types
+    Circle: [ 'radius', 'x', 'y' ], // Dynamic types
+    Text: [ T.String() ],
     Clear: [], // 0 arguments. For dynamic number of arguments, use null
 });
 ```
