@@ -67,11 +67,30 @@ logMessage(Action.DeleteAll());       // >> Deleting all entries
 logMessage(Action.Get());             // >> Unknown action
 ```
 
+#### Type validation
+You can add strict type validation instead of argument descriptions. You can read more about types module [here](./docs/react.md)
+
+```js
+import T from 'enum-fp/types';
+
+const TodoAction = Enum({
+  Add: [ T.String('message') ],
+  SetChecked: [ T.Number('id'), T.Bool('isChecked') ],
+  Delete: [ T.Number('id') ],
+  Edit: [ T.Number('id'), T.String('message') ],
+  DeleteAll: [],
+});
+```
+
+NOTE: The string passed to the functions are just for documentation purposes and are optional. It won't affect the behavior of the type in any way.
+
+
+
 
 ### Enum use cases
 
 #### In the react world
-You can use it to manage react component state! [Documentation](./docs/react.md)
+You can use it to manage react component state! [Checkout the documentation](./docs/react.md)
 
 
 #### Safely work with empty/invalid states

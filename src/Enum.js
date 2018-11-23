@@ -1,33 +1,30 @@
+import { createEnumFactory } from './utils';
+import T, { validateArgs } from './Type';
 
-import { reduceTypeConstructors, prop, normalizeSumType, match } from './utils';
+// type TypeConstructor = ...a -> EnumTagType
 
-// type Pattern = Object (a -> b);
+// createConstructor :: (Enum, ConstructorDescription) -> TypeConstructor
+export const createConstructor = (Type, { name, props }) => (...args) => {
+    if(props ? !validateArgs(props, args) : false)
+        throw new TypeError(`Invalid number of args passed to constructor ${name}`);
 
-// (constructor)
-// Enum :: Array String | Object * -> Enum
-const Enum = sumTypeBody => {
-    const constructors = normalizeSumType(sumTypeBody);
-    const types = constructors.map(prop(['name']));
-
-    // isConstructor :: String ~> Boolean
-    const isConstructor = c => types.indexOf(c) !== -1 || types.indexOf(c.name) !== -1;
-
-    // cata :: Pattern ~> EnumTagType -> b
-    const cata = pattern => instance => match(instance, pattern);
-
-    let self = {
-        match,
-        cata,
-        caseOf: cata,
-        reduce: cata,
-        isConstructor,
+    const self = {
+        // args :: Array *
+        args,
+        // name :: String
+        name,
+        // props :: ?Array String
+        props,
+        // is :: String | EnumTagType | ConstructorDescription ~> Boolean
+        is: otherType => [otherType, otherType.name].indexOf(name) !== -1,
+        // match :: Object (* -> b) ~> b
+        match: pattern => Type.match(self, pattern),
     };
-
-    return {
-        // {String} :: TypeConstructor
-        ...reduceTypeConstructors(self, constructors),
-        ...self,
-    };
+    return self;
 };
 
-export default Enum;
+// Enum :: Array String | Object * -> Enum
+export default createEnumFactory({ createConstructor });
+
+// Type
+export { T };

@@ -1,6 +1,6 @@
 
 import Enum from '../src/Enum';
-import createConstructor from '../src/createConstructor';
+import { createConstructor } from '../src/Enum';
 import { Constructor as Constr } from '../src/utils';
 
 const TestType = Enum([ 'Type', 'TypeWithArgs', 'Tag', 'NewTag' ]);
@@ -28,7 +28,7 @@ describe('createConstructor', () => {
             expect(tagWithArgs.args).toHaveLength(2);
         });
 
-        it('should throw error if there is a mismatch in the props and arguements', () => {
+        it('should throw error if there is a mismatch in the props and arguements length', () => {
             const Tag = createConstructor(TestType, Constr({
                 name: 'Type',
                 props: [ 'a', 'b' ],
@@ -39,6 +39,20 @@ describe('createConstructor', () => {
             expect(() => Tag(1)).toThrowError();
             expect(() => Tag(1, 2, 3)).toThrowError();
         });
+
+        // it('should validate types and throw error for invalid ones (basic types)', () => {
+        //     const Tag = createConstructor(TestType, Constr({
+        //         name: 'Type',
+        //         props: [ T.Number(), T.String() ],
+        //     }));
+
+        //     expect(() => Tag(0, '')).toThrowError();
+        //     expect(() => Tag(1, 'Helo world')).toThrowError();
+        //     expect(() => Tag(1, 2)).not.toThrowError();
+        //     expect(() => Tag()).toThrowError();
+        //     expect(() => Tag(1)).toThrowError();
+        //     expect(() => Tag(1, 2, 3)).toThrowError();
+        // });
     });
 
     describe('#is', () => {

@@ -1,6 +1,6 @@
 {
   "name": "enum-fp",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.3",
   "description": "Functional enum type for javascript with simple pattern matching",
   "main": "./build/Enum.js",
   "repository": "https://github.com/phenax/enum-fp",
@@ -17,7 +17,7 @@
     "switch"
   ],
   "scripts": {
-    "build": "babel src --out-dir build --minified",
+    "build": "babel src --out-dir build --minified --compact --no-comments --delete-dir-on-start",
     "watch": "yarn build --watch",
     "lint": "eslint ./src",
     "test": "jest",
@@ -44,8 +44,5 @@
     "codecov": "^3.1.0",
     "eslint": "^5.9.0",
     "jest": "^23.6.0"
-  },
-  "optionalDependencies": {
-    "react": "^16.5.2"
   }
 }

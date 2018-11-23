@@ -107,6 +107,25 @@ describe('Enum', () => {
             expect(resultOnDelete).toBe('Deleting - [5]');
             expect(pattern.Delete).toHaveBeenCalledTimes(1);
         });
+
+        it('should match the correct function and call it with the constructor arguements (for forced 0 arguments)', () => {
+            const Type = Enum({
+                Add: [],
+                Delete: [],
+            });
+
+            const pattern = {
+                Add: jest.fn(() => 'Adding'),
+                Delete: jest.fn(() => 'Deleting'),
+            };
+            const resultOnAdd = Type.match(Type.Add(), pattern);
+            const resultOnDelete = Type.match(Type.Delete(), pattern);
+
+            expect(resultOnAdd).toBe('Adding');
+            expect(pattern.Add).toHaveBeenCalledTimes(1);
+            expect(resultOnDelete).toBe('Deleting');
+            expect(pattern.Delete).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe('#caseOf|#cata', () => {
