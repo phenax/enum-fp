@@ -63,6 +63,7 @@ export const isOfType = type => value => {
 // validateArgs :: ([Type], [a]) -> Bool
 export const validateArgs = (typeList, valueList) => {
     if(typeList.length !== valueList.length) return false;
+    if(typeList.length === 0) return true;
 
     const [type, ...types] = typeList;
     const [val, ...vals] = valueList;

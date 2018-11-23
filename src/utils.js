@@ -35,20 +35,20 @@ export const createEnumFactory = options => sumTypeBody => {
     const { createConstructor } = options;
 
     const typeNames = constructors.map(prop(['name']));
-    const isConstr = t =>
+
+    // isConstructor :: String ~> Boolean
+    const isConstructor = t => !t ? false :
         typeNames.indexOf(t) !== -1 || typeNames.indexOf(t.name) !== -1;
 
     // cata :: Pattern ~> EnumTagType -> b
     const cata = pattern => instance => match(instance, pattern);
 
     let self = {
+        isConstructor,
         match,
         cata,
         caseOf: cata,
         reduce: cata,
-
-        // isConstructor :: String ~> Boolean
-        isConstructor: isConstr,
     };
 
     return {
@@ -62,11 +62,14 @@ export const createEnumFactory = options => sumTypeBody => {
     };
 };
 
-
+// isObjectOfType :: String -> a -> Boolean
 const isObjectOfType = typeName => a => ({}).toString.call(a) === `[object ${typeName}]`;
+
 // isList :: * -> Boolean
 export const isList = isObjectOfType('Array');
+
 // isObject:: * -> Boolean[object 
 export const isObject = isObjectOfType('Object');
 
+// values :: Object a -> [a]
 export const values = obj => Object.keys(obj).sort().map(k => obj[k]);
