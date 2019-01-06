@@ -15,5 +15,23 @@ pnpm i --save enum-fp
 ```
 **Import it to your file**
 ```javascript
-import EnumType from 'enum-fp';
+import Enum from 'enum-fp';
 ```
+
+#### Create an enum type
+```js
+const Action = Enum([ 'Add', 'Edit', 'Delete', 'Get' ]);
+
+// Or with a fixed number of arguments
+const Maybe = Enum({
+    Just: [ 'value' ],
+    Nothing: [],
+});
+```
+
+#### Create an instance of the type using one of the contructors
+```js
+const action = Action.Edit(2, 'Hello world');
+```
+
+[#### Next topic](./enum_type.md)

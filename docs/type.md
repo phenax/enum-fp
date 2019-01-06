@@ -64,3 +64,6 @@ const isUser = user => validateRecord({
     age: T.Number(),
 }, user);
 ```
+
+
+[#### Next topic](./react.md)
