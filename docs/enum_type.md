@@ -119,6 +119,6 @@ draw(Canvas.Circle(20, 50, 50));
 draw(Canvas.Point(20, 25));
 ```
 
-[#### Explanation of enums](https://stijndewitt.com/2014/01/26/enums-in-javascript/)
+[#### Explanation of sum-types](https://medium.com/@phenax5/writing-cleaner-and-safer-javascript-with-sum-types-bec9c68ba7aa)
 
 [#### Next topic](./type.md)
