@@ -118,3 +118,7 @@ draw(Canvas.Clear());
 draw(Canvas.Circle(20, 50, 50));
 draw(Canvas.Point(20, 25));
 ```
+
+[#### Explanation of enums](https://stijndewitt.com/2014/01/26/enums-in-javascript/)
+
+[#### Next topic](./type.md)
