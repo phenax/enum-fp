@@ -118,3 +118,7 @@ draw(Canvas.Clear());
 draw(Canvas.Circle(20, 50, 50));
 draw(Canvas.Point(20, 25));
 ```
+
+[#### Explanation of sum-types](https://medium.com/@phenax5/writing-cleaner-and-safer-javascript-with-sum-types-bec9c68ba7aa)
+
+[#### Next topic](./type.md)
