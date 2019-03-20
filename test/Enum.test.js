@@ -16,6 +16,24 @@ describe('Enum', () => {
             instance.Action1();
             instance.Action2();
         });
+
+        it('should expose `constructors` array to read the exposed constructors', () => {
+            const instance1 = Enum([ 'Action1', 'Action2' ]);
+            const instance2 = Enum({
+                ActionA: [],
+                ActionB: ['arg1', 'arg2'],
+            });
+
+            expect(instance1.constructors).toEqual({
+                Action1: { name: 'Action1' },
+                Action2: { name: 'Action2' },
+            });
+
+            expect(instance2.constructors).toEqual({
+                ActionA: { name: 'ActionA', props: [] },
+                ActionB: { name: 'ActionB', props: ['arg1', 'arg2'] },
+            });
+        });
     });
 
     describe('#match', () => {
