@@ -34,6 +34,25 @@ describe('Enum', () => {
                 ActionB: { name: 'ActionB', props: ['arg1', 'arg2'] },
             });
         });
+
+        it('should allow iterating over the constructors', () => {
+            const instance1 = Enum([ 'Action1', 'Action2' ]);
+            const instance2 = Enum({
+                ActionA: [],
+                ActionB: ['arg1', 'arg2'],
+            });
+
+            expect(instance1.length).toBe(2);
+            expect(instance2.length).toBe(2);
+
+            instance1.forEach(val => {
+                expect(val).toBe(instance1.constructors[val.name]);
+            });
+
+            instance2.forEach(val => {
+                expect(val).toBe(instance2.constructors[val.name]);
+            });
+        });
     });
 
     describe('#match', () => {
