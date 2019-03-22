@@ -1,5 +1,8 @@
+
+function identity(x) { return x; }
+
 // data Constructor = { name: String, props: [Type|String] };
-export const Constructor = x => x;
+export const Constructor = identity;
 
 // prop :: Array -> Object
 export const prop = (path, defaultVal) => obj => path.reduce(
@@ -49,6 +52,9 @@ export const createEnumFactory = options => sumTypeBody => {
         cata,
         caseOf: cata,
         reduce: cata,
+        constructors: listToObject(prop(['name']), identity, constructors),
+        length: constructors.length,
+        forEach: constructors.forEach.bind(constructors),
     };
 
     return {
