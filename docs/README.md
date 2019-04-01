@@ -1,17 +1,17 @@
 
 # Topics
 
-[### Getting Started](./getting_started.md)
+### [Getting Started](./getting_started.md)
 * installation
 * import
 
-[### EnumType](./enum_type.md)
+### [EnumType](./enum_type.md)
 * using enum instance
 
-[### Types](./type.md)
+### [Types](./type.md)
 * type validation
 * api
 
-[### React](./react.md)
+### [React](./react.md)
 * Hooks 
 * reducer HOC 
