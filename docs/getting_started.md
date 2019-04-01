@@ -34,4 +34,4 @@ const Maybe = Enum({
 const action = Action.Edit(2, 'Hello world');
 ```
 
-[#### Next topic](./enum_type.md)
+[Next topic >](./enum_type.md)
