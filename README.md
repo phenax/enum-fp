@@ -119,7 +119,9 @@ const [ firstName, lastName ] = getNameSplit({ name: 'Akshay Nair' }); // >> ret
 If you are unfamiliar with functors, you can read [Functors in JS](https://hackernoon.com/functors-in-javascript-20a647b8f39f) blog post.
 
 * **Maybe**
+
 `Maybe` functor is used to handle null.
+
 ```js
 const Maybe = Enum({ Just: ['value'], Nothing: [] });
 
@@ -130,7 +132,9 @@ const fmap = fn => Maybe.cata({
 ```
 
 * **Either**
+
 `Either` functor is used for handling exceptions
+
 ```js
 const Either = Enum({ Left: ['error'], Right: ['value'] });
 
