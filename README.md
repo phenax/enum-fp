@@ -100,7 +100,7 @@ You can use it to manage react component state! [Checkout the documentation](./d
 // Just an example. You should use `Maybe` functor in cases like these
 const Value = Enum({ Invalid: [], Valid: ['value'] });
 
-const getName = user => user && user.name
+const extractName = user => user && user.name
   ? Value.Valid(user.name)
   : Value.Invalid();
 
@@ -109,7 +109,9 @@ const splitBySpace = Value.cata({
   Invalid: () => [],
 });
 
-const [ firstName, lastName ] = compose(splitBySpace, getName, getUser)();
+const getNameSplit = compose(splitBySpace, extractName);
+
+const [ firstName, lastName ] = getNameSplit({ name: 'Akshay Nair' }); // >> returns ['Akshay','Nair']
 ```
 
 
