@@ -1,6 +1,8 @@
 # Enum-FP
 Functional enum type for javascript with pattern matching
 
+[Read more about SumTypes using EnumFP in this blog post](https://medium.com/@phenax5/writing-cleaner-and-safer-javascript-with-sum-types-bec9c68ba7aa)
+
 ## Getting started
 **To add this package to your project**
 ```bash
