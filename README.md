@@ -38,7 +38,7 @@ const Maybe = Enum({
 
 #### Create an instance of the type using one of the contructors
 ```js
-const action = Action.Edit(2, 'Hello world');
+const action = Action.Edit(2, 'Hello world and India');
 ```
 
 #### Pattern matching
@@ -57,7 +57,8 @@ const logMessage = action => console.log('>>',
 
 logMessage(Action.Add('Earth'));      // >> Adding "Earth"
 logMessage(Action.Add('Earth 2'));    // >> Adding "Earth 2"
-logMessage(Action.Add('Pluto'));      // >> Adding "Pluto"
+logMessage(Action.Add('Pluto'));
+logMessage(Action.Add('Pluto'));       // >> Adding "Pluto1"
 logMessage(Action.Edit(1, 'Mars'));   // >> Editing [2] to "Mars"
 logMessage(Action.Delete(2));         // >> Deleting [3]
 logMessage(Action.Add('Pluto'));      // >> Adding "Pluto"
@@ -90,7 +91,7 @@ NOTE: The string passed to the functions are just for documentation purposes and
 ### Enum use cases
 
 #### In the react world
-You can use it to manage react component state! [Checkout the documentation](./docs/react.md)
+`You can use it to manage react component state!` [Checkout the documentation](./docs/react.md)
 
 
 #### Safely work with empty/invalid states
@@ -116,7 +117,7 @@ const [ firstName, lastName ] = getNameSplit({ name: 'Akshay Nair' }); // >> ret
 
 
 #### In the functional world
-If you are unfamiliar with functors, you can read [Functors in JS](https://hackernoon.com/functors-in-javascript-20a647b8f39f) blog post.
+If you are unfamiliar with `functors`, you can read [Functors in JS](https://hackernoon.com/functors-in-javascript-20a647b8f39f) blog post.
 
 * **Maybe**
 
