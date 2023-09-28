@@ -22,6 +22,29 @@ export const createConstructor = (Type, { name, props }) => (...args) => {
     };
     return self;
 };
+// Maybe
+const Maybe = createEnumFactory({
+    createConstructor: (Type, constr) => value => {
+        if (value === null || value === undefined) {
+            return Type.Nothing();
+        }
+        return { ...constr, args: [value] };
+    },
+})(['Just', 'Nothing']);
+
+// Either
+const Either = createEnumFactory({
+    createConstructor: (Type, constr) => value => ({
+        ...constr,
+        args: [value],
+        isLeft: true,
+        isRight: false,
+        fold: (leftFn, rightFn) => leftFn(value),
+    }),
+})(['Left', 'Right']);
+
+// Exporting Maybe and Either
+export { Maybe, Either };
 
 // Enum :: Array String | Object * -> Enum
 export default createEnumFactory({ createConstructor });
